@@ -1,6 +1,6 @@
 package Minari.cheongForDo.domain.user.entity;
 
-public class User {
+public class Member {
     private Long id; // 유저 id
 
     private String name; // 유저 이름
