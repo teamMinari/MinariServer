@@ -1,6 +1,8 @@
 package Minari.cheongForDo.domain.member.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
 
@@ -9,15 +11,31 @@ import java.time.LocalDate;
 public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @NotNull
     private Long id;
 
-    private String username;
+    @NotNull
+    private String userName;
+
+    @NotNull
     private String password;
+
+    @NotNull
+    private String profileImage;
+
+    @NotNull
     private String email;
 
+    @NotNull
     private LocalDate registrationDate;
 
+    @Nullable
     private int points;
+
+    @Nullable
+    @ManyToOne
+    private Long vocaBook;
 
     public Long getId() {
         return id;
@@ -27,12 +45,20 @@ public class MemberEntity {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String username) {
+        this.userName = username;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profilePicture) {
+        this.profileImage = profilePicture;
     }
 
     public String getPassword() {
@@ -65,6 +91,13 @@ public class MemberEntity {
 
     public void setPoints(int points) {
         this.points = points;
+    }
 
+    public Long getVocaBook() {
+        return vocaBook;
+    }
+
+    public void setVocaBook(@Nullable Long vocaBook) {
+        this.vocaBook = vocaBook;
     }
 }
