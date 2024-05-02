@@ -1,103 +1,46 @@
 package Minari.cheongForDo.domain.member.entity;
 
-import jakarta.annotation.Nullable;
+
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 
+@Getter
+@Setter
 @Entity
+@Table(name = "member")
+@NoArgsConstructor
 public class MemberEntity {
+
+
+    // 회원 Id
     @Id
+    @Column(name = "idx")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idx;
 
-    @NotNull
-    private Long id;
-
-    @NotNull
-    private String userName;
-
-    @NotNull
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @NotNull
-    private String profileImage;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @NotNull
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @NotNull
-    private LocalDate registrationDate;
+    @Column(name = "createdDate", nullable = false)
+    private LocalDate createdDate;
 
-    @Nullable
-    private int points;
+    @Column(name = "vocaBook", nullable = true)
+    private String vocaBook;
 
-    @Nullable
-    @ManyToOne
-    private Long vocaBook;
+    @Column(name = "point", nullable = true)
+    private Long point;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String username) {
-        this.userName = username;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public void setProfileImage(String profilePicture) {
-        this.profileImage = profilePicture;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public LocalDate getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(LocalDate registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public Long getVocaBook() {
-        return vocaBook;
-    }
-
-    public void setVocaBook(@Nullable Long vocaBook) {
-        this.vocaBook = vocaBook;
-    }
+    @Column(name = "exp", nullable = true)
+    private Long exp;
 }
