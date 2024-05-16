@@ -1,7 +1,9 @@
 package Minari.cheongForDo.domain.member.entity;
 
 
+import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,12 +18,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class MemberEntity {
 
-
-    // 회원 Id
+    // 회원 pk
     @Id
     @Column(name = "idx")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
+
+    // 회원 아이디
+    @Column(name = "id", nullable = false)
+    private String id;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -43,4 +48,25 @@ public class MemberEntity {
 
     @Column(name = "exp", nullable = true)
     private Long exp;
+
+    @Column(name = "authority", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MemberAccountType authority;
+
+    @Builder
+    public MemberEntity (
+            String id,
+            String password,
+            String name,
+            String birth,
+            String email,
+            String phoneNum,
+            MemberAccountType authority
+    ) {
+        this.id = id;
+        this.password = password;
+        this.name = name;
+        this.email = email;
+        this.authority = authority;
+    }
 }
