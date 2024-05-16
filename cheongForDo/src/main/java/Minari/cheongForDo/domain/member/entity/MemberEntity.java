@@ -58,9 +58,7 @@ public class MemberEntity {
             String id,
             String password,
             String name,
-            String birth,
             String email,
-            String phoneNum,
             MemberAccountType authority
     ) {
         this.id = id;
