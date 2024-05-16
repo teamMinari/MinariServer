@@ -38,9 +38,7 @@ public class MemberService {
                                 bCryptPasswordEncoder.encode(dto.getPassword())
                         )
                         .name(dto.getName())
-                        .birth(dto.getBirth())
                         .email(dto.getEmail())
-                        .phoneNum(dto.getPhoneNum())
                         .authority(MemberAccountType.ROLE_USER)
                         .build()
         );
