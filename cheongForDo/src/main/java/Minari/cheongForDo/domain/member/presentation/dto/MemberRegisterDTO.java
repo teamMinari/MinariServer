@@ -16,12 +16,6 @@ public class MemberRegisterDTO {
     private String name;
 
     @NotBlank
-    private String birth;
-
-    @NotBlank
     private String email;
-
-    @NotBlank
-    private String phoneNum;
 
 }
