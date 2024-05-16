@@ -1,19 +1,74 @@
 package Minari.cheongForDo.domain.member.service;
 
 
+import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
+import Minari.cheongForDo.domain.member.presentation.dto.MemberLoginDTO;
 import Minari.cheongForDo.domain.member.repository.MemberRepository;
+import Minari.cheongForDo.domain.member.presentation.dto.MemberRegisterDTO;
+import Minari.cheongForDo.global.auth.JwtUtils;
+import Minari.cheongForDo.global.exception.CustomErrorCode;
+import Minari.cheongForDo.global.exception.CustomException;
+import Minari.cheongForDo.global.response.BaseResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository MEMBER_REPOSITORY;
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtUtils jwtUtils;
 
+    public BaseResponse<?> postRegister(MemberRegisterDTO dto) {
+        if (memberRepository.existsById(dto.getId())) {
+            throw new CustomException(CustomErrorCode.MEMBER_ALREADY_EXIST);
+        }
+
+        memberRepository.save(
+                MemberEntity.builder()
+                        .id(dto.getId())
+                        .password(
+                                bCryptPasswordEncoder.encode(dto.getPassword())
+                        )
+                        .name(dto.getName())
+                        .birth(dto.getBirth())
+                        .email(dto.getEmail())
+                        .phoneNum(dto.getPhoneNum())
+                        .authority(MemberAccountType.ROLE_USER)
+                        .build()
+        );
+
+        return BaseResponse.of(
+                true,
+                "OK",
+                "회원가입 성공",
+                null
+        );
+    }
+
+    public BaseResponse<?> postLogin(MemberLoginDTO dto) {
+        MemberEntity member = memberRepository.findById(dto.getId())
+                .orElseThrow(() -> new CustomException(CustomErrorCode.MEMBER_NOT_EXIST));
+
+        if (!bCryptPasswordEncoder.matches(dto.getPassword(), member.getPassword())) {
+            throw new CustomException(CustomErrorCode.MEMBER_NOT_CORRECT);
+        }
+
+        return BaseResponse.of(
+                true,
+                "OK",
+                "로그인 성공",
+                List.of(
+                        jwtUtils.generateToken(member)
+                )
+        );
+    }
 
 }
