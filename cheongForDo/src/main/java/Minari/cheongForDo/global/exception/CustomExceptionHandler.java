@@ -21,5 +21,4 @@ public class CustomExceptionHandler {
                 .status(exception.getErrorCode().getCode())
                 .body(response);
     }
-
 }

@@ -1,61 +1,40 @@
 package Minari.cheongForDo.global.auth;
 
-import Minari.cheongForDo.global.exception.CustomErrorCode;
-import Minari.cheongForDo.global.response.BaseResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
 
-@AllArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    private final JwtUtils jwtUtils;
-
-    private final ObjectMapper objectMapper;
+@RequiredArgsConstructor
+public class JwtAuthenticationFilter extends GenericFilterBean {
+    private final JwtProvider JWT_TOKEN_PROVIDER;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader("Authorization");
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String token = resolveToken(request);
 
-        if (token != null) {
-            if (!jwtUtils.isExpired(token)) {
-                Authentication authentication = jwtUtils.getAuthentication(token);
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            } else {
-                setErrorResponse(response, CustomErrorCode.JWT_WAS_EXPIRED);
-                return;
-            }
+        if (token != null && JWT_TOKEN_PROVIDER.validateToken(token)) {
+            Authentication authentication = JWT_TOKEN_PROVIDER.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
-        doFilter(request, response, filterChain);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    public void setErrorResponse(
-            HttpServletResponse response,
-            CustomErrorCode errorCode
-    ) throws IOException {
-        response.setStatus(errorCode.getCode().value());
-        response.setContentType("application/json;charset=UTF-8");
-
-        response.getWriter().write(
-                objectMapper.writeValueAsString(
-                        BaseResponse.of(
-                                false,
-                                errorCode.getStatus(),
-                                errorCode.getMessage(),
-                                null
-                        )
-                )
-        );
+    private String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }

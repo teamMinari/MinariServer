@@ -18,5 +18,4 @@ public enum MemberAccountType {
                 throw new IllegalArgumentException("잘못된 권한 이름");
         }
     }
-
 }

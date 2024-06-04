@@ -1,12 +1,17 @@
 package Minari.cheongForDo.global.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class CustomException extends RuntimeException {
+    private final ErrorCode ERROR_CODE;
 
-    private final CustomErrorCode errorCode;
+    public CustomException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.ERROR_CODE = errorCode;
+    }
 
+    public ErrorCode getErrorCode() {
+        return ERROR_CODE;
+    }
 }
