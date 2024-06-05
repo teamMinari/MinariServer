@@ -3,20 +3,19 @@ package Minari.cheongForDo.domain.member.entity;
 
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
-
-import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
 
 
 @Getter
 @Setter
 @Entity
 @Table(name = "member")
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
+@NoArgsConstructor
 public class MemberEntity {
 
     // 회원 pk

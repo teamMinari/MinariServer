@@ -1,14 +1,21 @@
 package Minari.cheongForDo.domain.member.presentation.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class MemberRegisterDTO {
-    private String id;
-    private String password;
-    private String name;
-    private String email;
-}
 
+    @NotBlank
+    private String id;
+
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    private String email;
+
+}
