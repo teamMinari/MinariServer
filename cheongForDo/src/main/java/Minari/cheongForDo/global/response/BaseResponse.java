@@ -7,12 +7,13 @@ import java.util.List;
 
 @Getter
 public class BaseResponse<T> {
-    final  boolean success;
-    final String status;
-    final String message;
+
+    private final  boolean success;
+    private final String status;
+    private final String message;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    final List<T> data;
+    private final List<T> data;
 
     private BaseResponse(
             boolean success,
