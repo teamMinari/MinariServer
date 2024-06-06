@@ -4,16 +4,12 @@ import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Getter
-@Setter
 @AllArgsConstructor
 public class JwtUserDetails implements UserDetails {
 
@@ -22,7 +18,9 @@ public class JwtUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
+
         authorities.add(MemberAccountType.convert(MEMBER.getAuthority()));
+
         return authorities;
     }
 
