@@ -39,7 +39,6 @@ public class Term { // 추가로 들어가야 할 것 : 용어 유사어 termSiW
 
     // 용어 좋아요
     @Column
-    @Enumerated(EnumType.STRING)
     private Boolean termLike;
 
     @Builder

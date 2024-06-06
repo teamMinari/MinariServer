@@ -3,7 +3,7 @@ package Minari.cheongForDo.global.auth;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.member.repository.MemberRepository;
 import Minari.cheongForDo.global.exception.CustomException;
-import Minari.cheongForDo.global.exception.ErrorCode;
+import Minari.cheongForDo.global.exception.CustomErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         MemberEntity member = MEMBER_REPOSITORY.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.MEMBER_NOT_FOUND));
         return createUserDetails(member);
     }
 
