@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "member")
 @NoArgsConstructor
-public class MemberEntity {
+public class MemberEntity extends BaseTimeEntity {
 
     // 회원 pk
     @Id
@@ -36,9 +36,6 @@ public class MemberEntity {
 
     @Column(name = "email", nullable = false)
     private String email;
-
-    @Column(name = "createdDate", nullable = false)
-    private LocalDate createdDate;
 
     @Column(name = "vocaBook", nullable = true)
     private String vocaBook;

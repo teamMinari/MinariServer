@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("member")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public BaseResponse<?> postRegister(@Valid @RequestBody MemberRegisterDTO dto) {
         return memberService.postRegister(dto);
     }
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public BaseResponse<?> postLogin(@Valid @RequestBody MemberLoginDTO dto) {
         return memberService.postLogin(dto);
     }

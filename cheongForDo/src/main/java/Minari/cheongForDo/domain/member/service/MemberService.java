@@ -34,9 +34,7 @@ public class MemberService {
         memberRepository.save(
                 MemberEntity.builder()
                         .id(dto.getId())
-                        .password(
-                                bCryptPasswordEncoder.encode(dto.getPassword())
-                        )
+                        .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                         .name(dto.getName())
                         .email(dto.getEmail())
                         .authority(MemberAccountType.ROLE_USER)
