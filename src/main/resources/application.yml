@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: cheongForDo
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/cheong?serverTimezone=Asia/Seoul
+    username: root
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+jwt:
+  secret: fuoijf90jfj9ejiojfij0jldfjo3klnnv02nvijr02jkdnfjkndkj2nfnjn2inufnv8nuiwkjne2un8vnuo029j4oujnfohd8vhnou24209j309uvdnjnjsnsuuuuubbczviiho20
+  expire:
+    access: 86400
+    refresh: 604800
