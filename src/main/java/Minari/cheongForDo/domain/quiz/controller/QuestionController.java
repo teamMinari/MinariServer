@@ -18,12 +18,12 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @PostMapping("/create")
+    @PostMapping
     public BaseResponse<?> createQuestion(@RequestBody QuestionRequestDTO requestDTO) {
         return questionService.createQuestion(requestDTO);
     }
 
-    @PutMapping("/update{qtIdx}")
+    @PutMapping("/{qtIdx}")
     public Long updateQuestion(@PathVariable Long qtIdx, @RequestBody QuestionRequestDTO requestDTO) {
         return questionService.update(qtIdx, requestDTO);
     }
