@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig {
 
-    private final JwtUtils FINAL;
     private final ObjectMapper OBJECT_MAPPER;
 
     @Bean
