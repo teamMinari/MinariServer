@@ -15,13 +15,13 @@ public enum CustomErrorCode {
     MEMBER_NOT_AUTHORITY(HttpStatus.BAD_REQUEST, "M-4", "멤버가 권한을 가지고 있지 않음"),
 
     // 용어 관련 오류
-    TERM_NOT_EXIST(HttpStatus.NOT_FOUND, "T-1", "용어가 존재하지 않음"),
+    TERM_NOT_EXIST(HttpStatus.NOT_FOUND, "T-1", "용어가 존재하지 않습니다."),
 
     // JWT 관련 오류
-    JWT_WAS_EXPIRED(HttpStatus.FORBIDDEN, "J-1", "토큰이 만료되었다"),
+    JWT_WAS_EXPIRED(HttpStatus.FORBIDDEN, "J-1", "토큰이 만료되었습니다."),
 
     // 퀴즈 관련 오류
-    QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않음");
+    QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다.");
 
     private final HttpStatus code;
     private final String status;
