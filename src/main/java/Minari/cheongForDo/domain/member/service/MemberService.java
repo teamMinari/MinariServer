@@ -10,9 +10,14 @@ import Minari.cheongForDo.global.auth.JwtUtils;
 import Minari.cheongForDo.global.exception.CustomErrorCode;
 import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.BaseResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,6 +69,19 @@ public class MemberService {
                 List.of(
                         jwtUtils.generateToken(member)
                 )
+        );
+    }
+
+    public BaseResponse<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return BaseResponse.of(
+                true,
+                "OK",
+                "로그아웃 성공",
+                null
         );
     }
 
