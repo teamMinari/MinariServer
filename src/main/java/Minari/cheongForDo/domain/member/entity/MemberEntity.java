@@ -28,24 +28,31 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private String id;
 
+    // 비밀번호
     @Column(name = "password", nullable = false)
     private String password;
 
+    // 이름
     @Column(name = "name", nullable = false)
     private String name;
 
+    // 이메일
     @Column(name = "email", nullable = false)
     private String email;
 
+    // 단어장
     @Column(name = "vocaBook", nullable = true)
     private String vocaBook;
 
+    // 포인트
     @Column(name = "point", nullable = true)
     private Long point;
 
+    // 경험치
     @Column(name = "exp", nullable = true)
     private Long exp;
 
+    // 권한
     @Column(name = "authority", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberAccountType authority;
