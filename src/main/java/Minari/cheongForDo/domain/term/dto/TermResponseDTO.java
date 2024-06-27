@@ -25,8 +25,6 @@ public class TermResponseDTO {
     @NotBlank
     private TermCategory termCategory;
 
-    @NotBlank
-    private Boolean termLike;
 
     public static TermResponseDTO of(Term term) {
         return TermResponseDTO.builder()
@@ -34,7 +32,6 @@ public class TermResponseDTO {
                 .termExplain(term.getTermExplain())
                 .termDifficulty(term.getTermDifficulty())
                 .termCategory(term.getTermCategory())
-                .termLike(term.isTermLike())
                 .build();
     }
 }
