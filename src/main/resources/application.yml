@@ -9,10 +9,15 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
 jwt:
   secret: fuoijf90jfj9ejiojfij0jldfjo3klnnv02nvijr02jkdnfjkndkj2nfnjn2inufnv8nuiwkjne2un8vnuo029j4oujnfohd8vhnou24209j309uvdnjnjsnsuuuuubbczviiho20
   expire:
     access: 86400
     refresh: 604800
+
+server:
+  port: 8080
+  address: 10.80.162.8
+
