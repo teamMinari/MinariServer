@@ -1,5 +1,8 @@
 package Minari.cheongForDo.domain.term.model.service;
 
+import Minari.cheongForDo.domain.member.authority.MemberAccountType;
+import Minari.cheongForDo.domain.member.entity.MemberEntity;
+import Minari.cheongForDo.domain.member.repository.MemberRepository;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
@@ -8,10 +11,14 @@ import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.BaseResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_AUTHORITY;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST;
 
 @Service
@@ -19,6 +26,7 @@ import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST
 @RequiredArgsConstructor
 public class TermService {
         private final TermRepository termRepository;
+        private final MemberRepository memberRepository;
 
         // 용어 전체 조회
         public List<TermResponseDTO> getTerms() {
@@ -40,11 +48,20 @@ public class TermService {
 
         // 용어 생성
         public BaseResponse<?> createTerm(TermRequestDTO requestDTO) {
+                // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                // admin 확인 기능, 일단 주석 처리함.
+
+//                MemberEntity member = memberRepository.findById(authentication.getName())
+//                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
+//
+//                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
+//                        throw new CustomException(MEMBER_NOT_AUTHORITY);
+//                }
+
                 Term term = Term.builder()
                         .termNm(requestDTO.getTermNm())
                         .termExplain(requestDTO.getTermExplain())
                         .termDifficulty(requestDTO.getTermDifficulty())
-                        .termLike(requestDTO.getTermLike())
                         .termCategory(requestDTO.getTermCategory())
                         .build();
                 termRepository.save(term);
