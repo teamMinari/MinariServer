@@ -3,6 +3,7 @@ package Minari.cheongForDo.domain.term.dto;
 import Minari.cheongForDo.domain.term.model.enums.TermCategory;
 import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,13 +19,10 @@ public class TermRequestDTO {
     @NotBlank
     private String termExplain;
 
-    @NotBlank
+    @NotNull
     private TermDifficulty termDifficulty;
 
-    @NotBlank
+    @NotNull
     private TermCategory termCategory;
-
-    @NotBlank
-    private Boolean termLike;
 
 }
