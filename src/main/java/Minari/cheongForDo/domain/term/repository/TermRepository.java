@@ -10,7 +10,4 @@ public interface TermRepository extends JpaRepository<Term, String> {
 
     List<Term> findAllByTermNm(String termNm);
 
-    @Query("select p from Term p where p.termLike = true")
-    List<Term> findAllByTermLike();
-
 }
