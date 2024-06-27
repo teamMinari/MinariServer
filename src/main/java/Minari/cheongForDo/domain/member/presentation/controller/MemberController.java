@@ -4,12 +4,11 @@ import Minari.cheongForDo.domain.member.presentation.dto.MemberLoginDTO;
 import Minari.cheongForDo.domain.member.presentation.dto.MemberRegisterDTO;
 import Minari.cheongForDo.domain.member.service.MemberService;
 import Minari.cheongForDo.global.response.BaseResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
@@ -28,4 +27,9 @@ public class MemberController {
         return memberService.postLogin(dto);
     }
 
+
+    @GetMapping("/logout")
+    public BaseResponse<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        return memberService.logout(request, response);
+    }
 }
