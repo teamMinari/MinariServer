@@ -28,12 +28,6 @@ public class TermController {
         return termService.getTerms();
     }
 
-    // 좋아요 참인 용어를 조회
-//    @GetMapping("like")
-//    public List<TermResponseDTO> getTermLikes() {
-//        return termService.getTermLikes();
-//    }
-
     // 용어 등록
     @PostMapping
     public BaseResponse<?> createTerm(@RequestBody TermRequestDTO requestDTO) {
