@@ -19,10 +19,12 @@ jwt:
 
 server:
   port: 8080
-#  address: 10.80.163.17
+  address: 10.80.162.8
 
 logging:
   level:
     org:
       springframework:
         web: DEBUG
+
+
