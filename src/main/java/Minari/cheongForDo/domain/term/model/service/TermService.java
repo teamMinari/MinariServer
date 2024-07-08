@@ -4,7 +4,7 @@ import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
-import Minari.cheongForDo.global.exception.CustomException;
+import Minari.cheongForDo.global.custom.exception.CustomException;
 import Minari.cheongForDo.global.response.BaseResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST;
+import static Minari.cheongForDo.global.custom.exception.CustomErrorCode.TERM_NOT_EXIST;
 
 @Service
 @Transactional

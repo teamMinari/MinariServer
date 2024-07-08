@@ -3,6 +3,7 @@ package Minari.cheongForDo.domain.term.controller;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.model.service.TermService;
+import Minari.cheongForDo.global.custom.annotation.AdminOnly;
 import Minari.cheongForDo.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,6 +34,7 @@ public class TermController {
 //    public List<TermResponseDTO> getTermLikes() {
 //        return termService.getTermLikes();
 //    }
+
 
     // 용어 등록
     @PostMapping
