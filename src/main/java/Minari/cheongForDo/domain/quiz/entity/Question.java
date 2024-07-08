@@ -1,11 +1,14 @@
 package Minari.cheongForDo.domain.quiz.entity;
 
 import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
+import Minari.cheongForDo.domain.term.entity.Term;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,18 +43,23 @@ public class Question { // 용어 idx? 이름? 용어를 받아와야 함??
     @Column(nullable = false)
     private String qtCmt;
 
+    @ManyToOne()
+    @JoinColumn(name = "fk_term_id")
+    private Term qtTerm;
 
     @Builder
     public Question(
         String qtName,
         String qtContents,
         Boolean qtAnswer,
-        String qtCmt
+        String qtCmt,
+        Term qtTerm
     ) {
         this.qtName = qtName;
         this.qtContents = qtContents;
         this.qtAnswer = qtAnswer;
         this.qtCmt = qtCmt;
+        this.qtTerm = qtTerm;
     }
 
     public void update(QuestionRequestDTO requestDTO) {
@@ -59,6 +67,7 @@ public class Question { // 용어 idx? 이름? 용어를 받아와야 함??
         this.qtContents = requestDTO.getQtContents();
         this.qtAnswer = requestDTO.getQtAnswer();
         this.qtCmt = requestDTO.getQtCmt();
+        this.qtTerm = requestDTO.getQtTerm();
     }
 
 }

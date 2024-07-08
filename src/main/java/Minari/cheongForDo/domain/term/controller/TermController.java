@@ -5,6 +5,7 @@ import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.model.service.TermService;
 import Minari.cheongForDo.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,12 +28,6 @@ public class TermController {
     public List<TermResponseDTO> getTerms() {
         return termService.getTerms();
     }
-
-    // 좋아요 참인 용어를 조회
-//    @GetMapping("like")
-//    public List<TermResponseDTO> getTermLikes() {
-//        return termService.getTermLikes();
-//    }
 
     // 용어 등록
     @PostMapping

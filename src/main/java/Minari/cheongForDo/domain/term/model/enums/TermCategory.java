@@ -1,9 +1,9 @@
 package Minari.cheongForDo.domain.term.model.enums;
 
 public enum TermCategory {
-    증권,
-    금융,
-    경제,
-    부동산,
-    산업재계
+    securities, // 증권
+    finance, // 금융
+    economy, // 경제
+    realEstate, // 부동산
+    industrialBusiness // 산업재계
 }

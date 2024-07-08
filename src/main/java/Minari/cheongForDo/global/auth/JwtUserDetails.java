@@ -2,36 +2,33 @@ package Minari.cheongForDo.global.auth;
 
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
-import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-@AllArgsConstructor
-public class JwtUserDetails implements UserDetails {
-
-    private final MemberEntity MEMBER;
+public record JwtUserDetails(MemberEntity member) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        authorities.add(MemberAccountType.convert(MEMBER.getAuthority()));
+        authorities.add(MemberAccountType.convert(member.getAuthority()));
 
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return MEMBER.getPassword();
+        return member.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return MEMBER.getId();
+        return member.getId();
     }
 
     @Override

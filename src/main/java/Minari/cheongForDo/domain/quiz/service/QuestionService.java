@@ -14,7 +14,7 @@ import static Minari.cheongForDo.global.custom.exception.CustomErrorCode.QUESTIO
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class QuestionService { // 용어 관련해서 넣어야 할지도
+public class QuestionService { // 질문 일일, 전체 조회 필요합니다.
 
     private final QuestionRepository questionRepository;
 
@@ -25,6 +25,7 @@ public class QuestionService { // 용어 관련해서 넣어야 할지도
                 .qtContents(createDTO.getQtContents())
                 .qtAnswer(createDTO.getQtAnswer())
                 .qtCmt(createDTO.getQtCmt())
+                .qtTerm(createDTO.getQtTerm())
                 .build();
 
         questionRepository.save(question);

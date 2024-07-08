@@ -37,9 +37,6 @@ public class Term { // 추가로 들어가야 할 것 : 용어 유사어 termSiW
     @Enumerated(EnumType.STRING)
     private TermCategory termCategory;
 
-    // 용어 좋아요
-    @Column(nullable = false)
-    private boolean termLike = false;
 
     // LikeEntity에 들어갈 것
     /*
@@ -54,14 +51,12 @@ public class Term { // 추가로 들어가야 할 것 : 용어 유사어 termSiW
             String termNm,
             String termExplain,
             TermDifficulty termDifficulty,
-            TermCategory termCategory,
-            Boolean termLike
+            TermCategory termCategory
     ) {
         this.termNm = termNm;
         this.termExplain = termExplain;
         this.termDifficulty = termDifficulty;
         this.termCategory = termCategory;
-        this.termLike = termLike;
     }
 
     public void update(TermRequestDTO termRequestDTO) {
@@ -69,7 +64,6 @@ public class Term { // 추가로 들어가야 할 것 : 용어 유사어 termSiW
         this.termExplain = termRequestDTO.getTermExplain();
         this.termDifficulty = termRequestDTO.getTermDifficulty();
         this.termCategory = termRequestDTO.getTermCategory();
-        this.termLike = termRequestDTO.getTermLike();
     }
 
 }

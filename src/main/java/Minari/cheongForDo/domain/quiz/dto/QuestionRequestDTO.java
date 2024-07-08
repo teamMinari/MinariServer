@@ -1,5 +1,6 @@
 package Minari.cheongForDo.domain.quiz.dto;
 
+import Minari.cheongForDo.domain.term.entity.Term;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +23,6 @@ public class QuestionRequestDTO { // 용어?
     @NotBlank
     private String qtCmt;
 
+    @NotBlank
+    private Term qtTerm;
 }
