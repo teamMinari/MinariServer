@@ -1,4 +1,4 @@
-package Minari.cheongForDo.global.exception;
+package Minari.cheongForDo.global.custom.exception;
 
 import Minari.cheongForDo.global.response.BaseResponse;
 import org.springframework.http.ResponseEntity;
