@@ -32,10 +32,6 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    // 이름
-    @Column(name = "name", nullable = false)
-    private String name;
-
     // 이메일
     @Column(name = "email", nullable = false)
     private String email;
@@ -45,30 +41,71 @@ public class MemberEntity extends BaseTimeEntity {
     private String vocaBook;
 
     // 포인트
-    @Column(name = "point", nullable = true)
-    private Long point;
+    @Column(name = "point", nullable = false)
+    private Long point = 0L;
 
     // 경험치
-    @Column(name = "exp", nullable = true)
-    private Long exp;
+    @Column(name = "exp", nullable = false)
+    private Long exp = 0L;
 
     // 권한
     @Column(name = "authority", nullable = false)
     @Enumerated(EnumType.STRING)
     private MemberAccountType authority;
 
+    // 칭호
+    @Column(name = "title")
+    private String title;
+
+    // 레벨
+    @Column(name = "level", nullable = false)
+    private Long level = 1L;
+
+
     @Builder
     public MemberEntity (
+            Long idx,
             String id,
             String password,
-            String name,
             String email,
-            MemberAccountType authority
+            String vocaBook,
+            Long point,
+            Long exp,
+            MemberAccountType authority,
+            String title,
+            Long level
     ) {
+        this.idx = idx;
         this.id = id;
         this.password = password;
-        this.name = name;
         this.email = email;
+        this.vocaBook = vocaBook;
+        this.point = point;
+        this.exp = exp;
         this.authority = authority;
+        this.title = title;
+        this.level = level;
+    }
+
+    private static final long[] REQUIRED_EXP_PER_LEVEL = {0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500};
+
+    public void increaseExp(long expToAdd) {
+        this.exp += expToAdd;
+        checkLevelUp();
+    }
+
+    private void checkLevelUp() {
+        while (this.level < REQUIRED_EXP_PER_LEVEL.length - 1 && this.exp >= REQUIRED_EXP_PER_LEVEL[this.level.intValue()]) {
+            this.exp -= REQUIRED_EXP_PER_LEVEL[this.level.intValue()];
+            this.level++;
+        }
+    }
+
+    public long getTotalExp() {
+        long totalExp = this.exp;
+        for (int i = 0; i < this.level; i++) {
+            totalExp += REQUIRED_EXP_PER_LEVEL[i];
+        }
+        return totalExp;
     }
 }
