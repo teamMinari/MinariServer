@@ -12,12 +12,19 @@ spring:
       ddl-auto: create
 
 jwt:
-  secret: fuoijf90jfj9ejiojfij0jldfjo3klnnv02nvijr02jkdnfjkndkj2nfnjn2inufnv8nuiwkjne2un8vnuo029j4oujnfohd8vhnou24209j309uvdnjnjsnsuuuuubbczviiho20
+  secret: ${JWT_SECRET}
   expire:
-    access: 86400
-    refresh: 604800
+    access: 86400000
+    refresh: 604800000
 
 server:
   port: 8080
-  address: 10.80.162.8
+  address: 10.80.161.247
+
+admin:
+  id: minari
+  password: minari123!
+  email: minari@gmail.com
+  authority: ROLE_ADMIN
+
 
