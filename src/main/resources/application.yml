@@ -16,3 +16,13 @@ jwt:
   expire:
     access: 86400
     refresh: 604800
+
+server:
+  port: 8080
+#  address: 10.80.163.17
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
