@@ -1,6 +1,6 @@
 package Minari.cheongForDo.global.auth;
 
-import Minari.cheongForDo.global.custom.exception.CustomErrorCode;
+import Minari.cheongForDo.global.exception.CustomErrorCode;
 import Minari.cheongForDo.global.response.BaseResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;

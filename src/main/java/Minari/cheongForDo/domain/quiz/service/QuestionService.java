@@ -3,13 +3,13 @@ package Minari.cheongForDo.domain.quiz.service;
 import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
 import Minari.cheongForDo.domain.quiz.entity.Question;
 import Minari.cheongForDo.domain.quiz.repository.QuestionRepository;
-import Minari.cheongForDo.global.custom.exception.CustomException;
+import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.BaseResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static Minari.cheongForDo.global.custom.exception.CustomErrorCode.QUESTION_NOT_EXIST;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.QUESTION_NOT_EXIST;
 
 @Service
 @Transactional

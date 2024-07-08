@@ -8,8 +8,8 @@ import Minari.cheongForDo.domain.member.presentation.dto.MemberResponseDTO;
 import Minari.cheongForDo.domain.member.repository.MemberRepository;
 import Minari.cheongForDo.domain.member.presentation.dto.MemberRegisterDTO;
 import Minari.cheongForDo.global.auth.JwtUtils;
-import Minari.cheongForDo.global.custom.exception.CustomErrorCode;
-import Minari.cheongForDo.global.custom.exception.CustomException;
+import Minari.cheongForDo.global.exception.CustomErrorCode;
+import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.BaseResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static Minari.cheongForDo.global.custom.exception.CustomErrorCode.*;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.*;
 
 @Service
 @Transactional
