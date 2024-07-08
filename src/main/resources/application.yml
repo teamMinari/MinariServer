@@ -19,7 +19,6 @@ jwt:
 
 server:
   port: 8080
-  address: 10.80.161.247
 
 admin:
   id: minari
