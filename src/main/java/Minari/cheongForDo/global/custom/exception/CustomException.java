@@ -1,4 +1,4 @@
-package Minari.cheongForDo.global.exception;
+package Minari.cheongForDo.global.custom.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
