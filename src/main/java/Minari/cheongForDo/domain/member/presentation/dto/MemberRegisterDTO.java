@@ -13,9 +13,17 @@ public class MemberRegisterDTO {
     private String password;
 
     @NotBlank
-    private String name;
+    private String confirmPassword;
 
     @NotBlank
     private String email;
+
+    private Long point;
+
+    private Long exp;
+
+    private String title;
+
+    private Long level;
 
 }
