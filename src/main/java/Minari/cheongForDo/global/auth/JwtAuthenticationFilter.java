@@ -1,6 +1,6 @@
 package Minari.cheongForDo.global.auth;
 
-import Minari.cheongForDo.global.exception.CustomErrorCode;
+import Minari.cheongForDo.global.custom.exception.CustomErrorCode;
 import Minari.cheongForDo.global.response.BaseResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -10,7 +10,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
