@@ -36,27 +36,16 @@ public class TermService {
                 ).toList();
         }
 
-        // 자기 단어장 조회 보류
-//        public List<TermResponseDTO> getTermLikes() {
-////                Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
-////                auth.
-//                List<Term> termList = termRepository.findAllByTermLike();
-//                return termList.stream().map(
-//                        TermResponseDTO::of
-//                ).toList();
-//        }
-
         // 용어 생성
         public BaseResponse<?> createTerm(TermRequestDTO requestDTO) {
-                // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                // admin 확인 기능, 일단 주석 처리함.
+                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//                MemberEntity member = memberRepository.findById(authentication.getName())
-//                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
-//
-//                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
-//                        throw new CustomException(MEMBER_NOT_AUTHORITY);
-//                }
+                MemberEntity member = memberRepository.findById(authentication.getName())
+                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
+
+                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
+                        throw new CustomException(MEMBER_NOT_AUTHORITY);
+                }
 
                 Term term = Term.builder()
                         .termNm(requestDTO.getTermNm())
@@ -84,6 +73,15 @@ public class TermService {
         // 용어 수정
         @Transactional
         public String update(String termNm, TermRequestDTO requestDTO) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+                MemberEntity member = memberRepository.findById(authentication.getName())
+                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
+
+                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
+                        throw new CustomException(MEMBER_NOT_AUTHORITY);
+                }
+
                 Term term = termRepository.findById(termNm).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
 
@@ -95,6 +93,15 @@ public class TermService {
         // 용어 삭제
         @Transactional
         public BaseResponse<?> deleteTerm(String termNm) {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+                MemberEntity member = memberRepository.findById(authentication.getName())
+                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
+
+                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
+                        throw new CustomException(MEMBER_NOT_AUTHORITY);
+                }
+
                 Term term = termRepository.findById(termNm).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
                 );
