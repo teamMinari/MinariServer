@@ -50,11 +50,11 @@ public class MemberService {
                         .id(dto.getId())
                         .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                         .email(dto.getEmail())
-                        .point(dto.getPoint() != null ? dto.getPoint() : 0L)
-                        .exp(dto.getExp() != null ? dto.getExp() : 0L)
+                        .point(0L)
+                        .exp(0L)
                         .authority(MemberAccountType.ROLE_ADMIN)
-                        .title(dto.getTitle())
-                        .level(dto.getLevel() != null ? dto.getLevel() : 1L)
+                        .title(null)
+                        .level(1L)
                         .build()
         );
 

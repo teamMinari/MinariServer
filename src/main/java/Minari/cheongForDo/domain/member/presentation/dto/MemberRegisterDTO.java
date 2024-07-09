@@ -18,12 +18,4 @@ public class MemberRegisterDTO {
     @NotBlank
     private String email;
 
-    private Long point;
-
-    private Long exp;
-
-    private String title;
-
-    private Long level;
-
 }

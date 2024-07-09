@@ -31,7 +31,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()
+                                .requestMatchers("member/login", "member/register").permitAll() // 로그인/회원가입 요청은 로그인 없이 (로그인을 해야하니까) 넘어가도록함
+                                .requestMatchers("swagger-ui/**", "/v3/**").permitAll()
+                                .anyRequest().authenticated() // 일반적인 요청은 로그인을 필요로 함.
+//                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
