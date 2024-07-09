@@ -1,0 +1,59 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Set yml file 
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: ./src/main/resources/application.yml
+      env:
+        spring.datasource.password: ${{ secrets.DB_PASSWORD }} 
+    - name: Build with Gradle
+      run: ./gradlew build -x test --parallel
+      
+    - name: Build Docker Image For Spring
+      run: |
+        docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cheongfordo:latest .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/cheongfordo:latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: EC2 Docker Run
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.LINUX_HOST }}
+          username: ${{ secrets.LINUX_USERNAME }}
+          password: ${{ secrets.LINUX_PASSWORD }}
+          port: ${{ secrets.LINUX_SSH_PORT }}
+          script: |
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+            docker stop cheongfordo
+            docker rm cheongfordo
+            docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/cheongfordo:latest
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/cheongfordo:latest
+            docker run -d -p 80:8080 --name cheongfordo ${{ secrets.DOCKERHUB_USERNAME }}/cheongfordo:latest
