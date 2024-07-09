@@ -49,7 +49,6 @@ jobs:
           host: ${{ secrets.LINUX_HOST }}
           username: ${{ secrets.LINUX_USERNAME }}
           password: ${{ secrets.LINUX_PASSWORD }}
-          port: ${{ secrets.LINUX_SSH_PORT }}
           script: |
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
             docker stop cheongfordo
