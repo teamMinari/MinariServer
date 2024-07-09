@@ -52,7 +52,7 @@ public class MemberService {
                         .email(dto.getEmail())
                         .point(dto.getPoint() != null ? dto.getPoint() : 0L)
                         .exp(dto.getExp() != null ? dto.getExp() : 0L)
-                        .authority(MemberAccountType.ROLE_USER)
+                        .authority(MemberAccountType.ROLE_ADMIN)
                         .title(dto.getTitle())
                         .level(dto.getLevel() != null ? dto.getLevel() : 1L)
                         .build()
