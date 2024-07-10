@@ -1,5 +1,6 @@
 package Minari.cheongForDo.domain.quiz.dto;
 
+import Minari.cheongForDo.domain.quiz.model.enums.QuestionDifficulty;
 import Minari.cheongForDo.domain.term.entity.Term;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,6 @@ import lombok.NoArgsConstructor;
 public class QuestionRequestDTO { // 용어?
 
     @NotBlank
-    private String qtName;
-
-    @NotBlank
     private String qtContents;
 
     @NotBlank
@@ -24,5 +22,5 @@ public class QuestionRequestDTO { // 용어?
     private String qtCmt;
 
     @NotBlank
-    private Term qtTerm;
+    private QuestionDifficulty qtDifficulty;
 }
