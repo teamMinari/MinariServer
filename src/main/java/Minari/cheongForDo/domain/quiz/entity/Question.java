@@ -1,6 +1,7 @@
 package Minari.cheongForDo.domain.quiz.entity;
 
 import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
+import Minari.cheongForDo.domain.quiz.model.enums.QuestionDifficulty;
 import Minari.cheongForDo.domain.term.entity.Term;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,16 +21,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "Question")
-public class Question { // 용어 idx? 이름? 용어를 받아와야 함??
+public class Question { // 질문 카테고리를 만들어야 할 수도 있음
 
     // 질문 Idx
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long qtIdx;
-
-    // 질문 이름
-    @Column(nullable = false)
-    private String qtName;
 
     // 질문 내용
     @Column(nullable = false)
@@ -43,31 +40,28 @@ public class Question { // 용어 idx? 이름? 용어를 받아와야 함??
     @Column(nullable = false)
     private String qtCmt;
 
-    @ManyToOne()
-    @JoinColumn(name = "fk_term_id")
-    private Term qtTerm;
+    // 질문 난이도
+    @Column(nullable = false)
+    private QuestionDifficulty qtDifficulty;
 
     @Builder
     public Question(
-        String qtName,
         String qtContents,
         Boolean qtAnswer,
         String qtCmt,
-        Term qtTerm
+        QuestionDifficulty qtDifficulty
     ) {
-        this.qtName = qtName;
         this.qtContents = qtContents;
         this.qtAnswer = qtAnswer;
         this.qtCmt = qtCmt;
-        this.qtTerm = qtTerm;
+        this.qtDifficulty = qtDifficulty;
     }
 
     public void update(QuestionRequestDTO requestDTO) {
-        this.qtName = requestDTO.getQtName();
         this.qtContents = requestDTO.getQtContents();
         this.qtAnswer = requestDTO.getQtAnswer();
         this.qtCmt = requestDTO.getQtCmt();
-        this.qtTerm = requestDTO.getQtTerm();
+        this.qtDifficulty = requestDTO.getQtDifficulty();
     }
 
 }
