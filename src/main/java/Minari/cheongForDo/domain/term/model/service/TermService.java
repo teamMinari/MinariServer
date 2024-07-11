@@ -1,5 +1,7 @@
 package Minari.cheongForDo.domain.term.model.service;
 
+import Minari.cheongForDo.domain.like.entity.Like;
+import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.member.repository.MemberRepository;
@@ -7,6 +9,7 @@ import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
+import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.BaseResponse;
 import jakarta.transaction.Transactional;
@@ -16,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_AUTHORITY;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_EXIST;
@@ -25,8 +29,10 @@ import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST
 @Transactional
 @RequiredArgsConstructor
 public class TermService {
+        private final LikeRepository likeRepository;
         private final TermRepository termRepository;
         private final MemberRepository memberRepository;
+        private final UserSessionHolder userSessionHolder;
 
         // 용어 전체 조회
         public List<TermResponseDTO> getTerms() {
@@ -102,9 +108,17 @@ public class TermService {
                         throw new CustomException(MEMBER_NOT_AUTHORITY);
                 }
 
+
+
                 Term term = termRepository.findById(termNm).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
                 );
+
+                // 용어 삭제할 때 like도 같이
+                MemberEntity curMember = userSessionHolder.current();
+                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, term);
+                like.ifPresent(likeRepository::delete);
+
                 termRepository.deleteById(termNm);
                 return BaseResponse.of(
                         true,
