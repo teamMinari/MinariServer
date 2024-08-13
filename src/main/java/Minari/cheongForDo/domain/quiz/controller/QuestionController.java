@@ -4,6 +4,8 @@ import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
 import Minari.cheongForDo.domain.quiz.dto.QuestionResponseDTO;
 import Minari.cheongForDo.domain.quiz.model.service.QuestionService;
 import Minari.cheongForDo.global.response.BaseResponse;
+import Minari.cheongForDo.global.response.Response;
+import Minari.cheongForDo.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,32 +27,32 @@ public class QuestionController {
     private final QuestionService questionService;
 
     // 질문 전체 조회
-    @GetMapping("/all")
-    public List<QuestionResponseDTO> getTerms() {
+    @GetMapping
+    public ResponseData<List<QuestionResponseDTO>> getTerms() {
         return questionService.getQuestions();
     }
 
     // 질문 등록
     @PostMapping
-    public BaseResponse<?> createQuestion(@RequestBody QuestionRequestDTO requestDTO) {
+    public Response createQuestion(@RequestBody QuestionRequestDTO requestDTO) {
         return questionService.createQuestion(requestDTO);
     }
 
     // 질문 하나 조회
-    @GetMapping
-    public QuestionResponseDTO getQuestion(@RequestParam Long qtIdx) {
-        return questionService.findOneQuestion(qtIdx);
+    @GetMapping("{questionIdx}")
+    public ResponseData<QuestionResponseDTO> getQuestion(@PathVariable Long questionIdx) {
+        return questionService.findOneQuestion(questionIdx);
     }
 
     // 질문 수정
     @PutMapping
-    public Long updateQuestion(@RequestParam Long qtIdx, @RequestBody QuestionRequestDTO requestDTO) {
+    public ResponseData<Long> updateQuestion(@RequestParam Long qtIdx, @RequestBody QuestionRequestDTO requestDTO) {
         return questionService.update(qtIdx, requestDTO);
     }
 
     // 질문 삭제
     @DeleteMapping
-    public BaseResponse<?> deleteQuestion(@RequestParam Long qtIdx) {
+    public Response deleteQuestion(@RequestParam Long qtIdx) {
         return questionService.deleteQuestion(qtIdx);
     }
 

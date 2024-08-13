@@ -4,54 +4,50 @@ import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
-import Minari.cheongForDo.domain.member.repository.MemberRepository;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
-import Minari.cheongForDo.global.response.BaseResponse;
+import Minari.cheongForDo.global.response.Response;
+import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_AUTHORITY;
-import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class TermService {
+
         private final LikeRepository likeRepository;
         private final TermRepository termRepository;
-        private final MemberRepository memberRepository;
         private final UserSessionHolder userSessionHolder;
 
         // 용어 전체 조회
-        public List<TermResponseDTO> getTerms() {
+        public ResponseData<List<TermResponseDTO>> getTerms() {
+
                 List<Term> termList = termRepository.findAll();
-                return termList.stream().map(
+
+                return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
+                        termList.stream().map(
                         TermResponseDTO::of
-                ).toList();
+                ).toList());
         }
 
         // 용어 생성
-        public BaseResponse<?> createTerm(TermRequestDTO requestDTO) {
-                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        public Response createTerm(TermRequestDTO requestDTO) {
+                MemberEntity curMember = userSessionHolder.current();
 
-                MemberEntity member = memberRepository.findById(authentication.getName())
-                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
-
-                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
-                        throw new CustomException(MEMBER_NOT_AUTHORITY);
-                }
+                checkMemberAuthority(curMember);
 
                 Term term = Term.builder()
                         .termNm(requestDTO.getTermNm())
@@ -59,74 +55,62 @@ public class TermService {
                         .termDifficulty(requestDTO.getTermDifficulty())
                         .termCategory(requestDTO.getTermCategory())
                         .build();
+
                 termRepository.save(term);
-                return BaseResponse.of(
-                        true,
-                        "OK",
-                        "용어 생성 성공 !!",
-                        null
-                );
+
+                return Response.of(HttpStatus.OK, "용어 생성 성공!");
         }
 
         // 용어 하나 조회
-        public TermResponseDTO findOneTerm(String termNm) {
+        public ResponseData<TermResponseDTO> findOneTerm(String termNm) {
+
                 Term term = termRepository.findById(termNm).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
                 );
-                return TermResponseDTO.of(term);
+
+                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(term));
         }
 
         // 용어 수정
         @Transactional
-        public String update(String termNm, TermRequestDTO requestDTO) {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        public ResponseData<String> update(String termNm, TermRequestDTO requestDTO) {
+                MemberEntity curMember = userSessionHolder.current();
 
-                MemberEntity member = memberRepository.findById(authentication.getName())
-                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
-
-                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
-                        throw new CustomException(MEMBER_NOT_AUTHORITY);
-                }
+                checkMemberAuthority(curMember);
 
                 Term term = termRepository.findById(termNm).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
 
                 );
+
                 term.update(requestDTO);
-                return term.getTermNm();
+
+                return ResponseData.of(HttpStatus.OK, "용어 수정 성공!", term.getTermNm());
         }
 
         // 용어 삭제
         @Transactional
-        public BaseResponse<?> deleteTerm(String termNm) {
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        public Response deleteTerm(String termNm) {
+                MemberEntity curMember = userSessionHolder.current();
 
-                MemberEntity member = memberRepository.findById(authentication.getName())
-                        .orElseThrow(() -> new CustomException(MEMBER_NOT_EXIST));
-
-                if (member.getAuthority() != MemberAccountType.ROLE_ADMIN) {
-                        throw new CustomException(MEMBER_NOT_AUTHORITY);
-                }
-
-
+                checkMemberAuthority(curMember);
 
                 Term term = termRepository.findById(termNm).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
                 );
 
-                // 용어 삭제할 때 like도 같이
-                MemberEntity curMember = userSessionHolder.current();
                 Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, term);
                 like.ifPresent(likeRepository::delete);
 
-                termRepository.deleteById(termNm);
-                return BaseResponse.of(
-                        true,
-                        "OK",
-                        "용어 삭제 성공 !!",
-                        null
-                );
+                termRepository.delete(term);
+
+                return Response.of(HttpStatus.OK, "용어 삭제 성공!");
         }
 
+        private void checkMemberAuthority(MemberEntity curMember) {
+                if (curMember.getAuthority() != MemberAccountType.ROLE_ADMIN) {
+                        throw new CustomException(MEMBER_NOT_AUTHORITY);
+                }
+        }
 
 }

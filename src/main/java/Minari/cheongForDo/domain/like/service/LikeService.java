@@ -8,9 +8,11 @@ import Minari.cheongForDo.domain.term.repository.TermRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomErrorCode;
 import Minari.cheongForDo.global.exception.CustomException;
-import Minari.cheongForDo.global.response.BaseResponse;
+import Minari.cheongForDo.global.response.Response;
+import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class LikeService {
     private final UserSessionHolder userSessionHolder;
     private final TermRepository termRepository;
 
-    public BaseResponse<?> toggle(String word){
+    public Response toggle(String word){
         MemberEntity curMember = userSessionHolder.current();
 
         Term term = termRepository.findById(word)
@@ -34,16 +36,13 @@ public class LikeService {
 
         if(like.isEmpty()){
             addLike(curMember, term);
-        }else{
+            return Response.of(HttpStatus.OK, "단어장 추가 성공");
+        }
+        else{
             likeRepository.delete(like.get());
+            return Response.of(HttpStatus.OK, "단어장 삭제 성공");
         }
 
-        return BaseResponse.of(
-                true,
-                "OK",
-                "단어장 추가/삭제 성공",
-                null
-        );
     }
 
     private void addLike(MemberEntity member, Term term){
@@ -55,17 +54,14 @@ public class LikeService {
         );
     }
 
-    public BaseResponse<?> getMy(){
+    public ResponseData<List<Term>> getMy(){
         MemberEntity curMember = userSessionHolder.current();
+
         List<Like> likes =  likeRepository.findByMember(curMember);
         List<Term> terms = likes.stream()
                 .map(Like::getTerm)
                 .toList();
-        return BaseResponse.of(
-                true,
-                "OK",
-                "단어장 조회 성공",
-                terms
-        );
+
+        return ResponseData.of(HttpStatus.OK, "단어장 조회 성공", terms);
     }
 }
