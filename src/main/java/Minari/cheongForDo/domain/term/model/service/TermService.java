@@ -7,6 +7,7 @@ import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
+import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
@@ -33,11 +34,11 @@ public class TermService {
         private final UserSessionHolder userSessionHolder;
 
         // 용어 전체 조회
-        public ResponseData<List<TermResponseDTO>> getTerms() {
+        public ResponseData<List<TermResponseDTO>> getTerms(TermDifficulty level) {
 
-                List<Term> termList = termRepository.findAll();
+                List<Term> termList = termRepository.findAllByTermDifficulty(level);
 
-                return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
+                return ResponseData.of(HttpStatus.OK, "용어 난이도 별 조회 성공!",
                         termList.stream().map(
                         TermResponseDTO::of
                 ).toList());
@@ -53,7 +54,6 @@ public class TermService {
                         .termNm(requestDTO.getTermNm())
                         .termExplain(requestDTO.getTermExplain())
                         .termDifficulty(requestDTO.getTermDifficulty())
-                        .termCategory(requestDTO.getTermCategory())
                         .build();
 
                 termRepository.save(term);

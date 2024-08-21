@@ -5,6 +5,7 @@ import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
 import Minari.cheongForDo.domain.quiz.dto.QuestionResponseDTO;
 import Minari.cheongForDo.domain.quiz.entity.Question;
+import Minari.cheongForDo.domain.quiz.model.enums.QuestionDifficulty;
 import Minari.cheongForDo.domain.quiz.repository.QuestionRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
@@ -39,11 +40,11 @@ public class QuestionService { //
     private final UserSessionHolder userSessionHolder;
 
     // 질문 전체 조회
-    public ResponseData<List<QuestionResponseDTO>> getQuestions() {
+    public ResponseData<List<QuestionResponseDTO>> getQuestions(QuestionDifficulty level) {
 
-        List<Question> questionList = questionRepository.findAll();
+        List<Question> questionList = questionRepository.findAllByQtDifficulty(level);
 
-        return ResponseData.of(HttpStatus.OK, "질문 전체 조회 성공!",
+        return ResponseData.of(HttpStatus.OK, "질문 난이도 별 조회 성공!",
                 questionList.stream().map(
                 QuestionResponseDTO::of
         ).toList());

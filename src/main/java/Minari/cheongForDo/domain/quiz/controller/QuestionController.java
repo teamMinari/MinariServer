@@ -2,6 +2,7 @@ package Minari.cheongForDo.domain.quiz.controller;
 
 import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
 import Minari.cheongForDo.domain.quiz.dto.QuestionResponseDTO;
+import Minari.cheongForDo.domain.quiz.model.enums.QuestionDifficulty;
 import Minari.cheongForDo.domain.quiz.model.service.QuestionService;
 import Minari.cheongForDo.global.response.BaseResponse;
 import Minari.cheongForDo.global.response.Response;
@@ -28,8 +29,8 @@ public class QuestionController {
 
     // 질문 전체 조회
     @GetMapping
-    public ResponseData<List<QuestionResponseDTO>> getTerms() {
-        return questionService.getQuestions();
+    public ResponseData<List<QuestionResponseDTO>> getTerms(QuestionDifficulty level) {
+        return questionService.getQuestions(level);
     }
 
     // 질문 등록

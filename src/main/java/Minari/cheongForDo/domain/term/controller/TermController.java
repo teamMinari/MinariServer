@@ -2,6 +2,7 @@ package Minari.cheongForDo.domain.term.controller;
 
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
+import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import Minari.cheongForDo.domain.term.model.service.TermService;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
@@ -24,10 +25,10 @@ import java.util.List;
 public class TermController {
     private final TermService termService;
 
-    // 용어 전체 조회
+    // 용어 난이도 별 조회
     @GetMapping
-    public ResponseData<List<TermResponseDTO>> getTerms() {
-        return termService.getTerms();
+    public ResponseData<List<TermResponseDTO>> getTerms(TermDifficulty level) {
+        return termService.getTerms(level);
     }
 
     // 용어 등록

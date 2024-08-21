@@ -1,6 +1,5 @@
 package Minari.cheongForDo.domain.term.dto;
 
-import Minari.cheongForDo.domain.term.model.enums.TermCategory;
 import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,8 +20,5 @@ public class TermRequestDTO {
 
     @NotNull
     private TermDifficulty termDifficulty;
-
-    @NotNull
-    private TermCategory termCategory;
 
 }
