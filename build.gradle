@@ -31,6 +31,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.5.0'
+	implementation 'org.hibernate:hibernate-core:6.2.10.Final'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
