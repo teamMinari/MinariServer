@@ -6,7 +6,6 @@ import Minari.cheongForDo.domain.member.presentation.dto.MemberRegisterDTO;
 import Minari.cheongForDo.domain.member.presentation.dto.MemberResponseDTO;
 import Minari.cheongForDo.domain.member.service.MemberService;
 import Minari.cheongForDo.global.auth.JwtInfo;
-import Minari.cheongForDo.global.response.BaseResponse;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.servlet.http.HttpServletRequest;

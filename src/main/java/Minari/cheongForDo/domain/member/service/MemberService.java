@@ -13,7 +13,6 @@ import Minari.cheongForDo.global.auth.JwtUtils;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomErrorCode;
 import Minari.cheongForDo.global.exception.CustomException;
-import Minari.cheongForDo.global.response.BaseResponse;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.*;
