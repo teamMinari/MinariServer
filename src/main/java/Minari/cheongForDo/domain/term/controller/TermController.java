@@ -25,10 +25,16 @@ import java.util.List;
 public class TermController {
     private final TermService termService;
 
-    // 용어 난이도 별 조회
+    // 용어 전체 조회
     @GetMapping
-    public ResponseData<List<TermResponseDTO>> getTerms(TermDifficulty level) {
-        return termService.getTerms(level);
+    public ResponseData<List<TermResponseDTO>> getTerms() {
+        return termService.getTerms();
+    }
+
+    // 용어 난이도 별 조회
+    @GetMapping("/level")
+    public ResponseData<List<TermResponseDTO>> getLevelTerms(TermDifficulty level) {
+        return termService.getLevelTerms(level);
     }
 
     // 용어 등록

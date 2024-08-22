@@ -29,8 +29,14 @@ public class QuestionController {
 
     // 질문 전체 조회
     @GetMapping
-    public ResponseData<List<QuestionResponseDTO>> getTerms(QuestionDifficulty level) {
-        return questionService.getQuestions(level);
+    public ResponseData<List<QuestionResponseDTO>> getQuestions() {
+        return questionService.getQuestions();
+    }
+
+    // 질문 난이도 별 조회
+    @GetMapping("/level")
+    public ResponseData<List<QuestionResponseDTO>> getLevelQuestions(QuestionDifficulty level) {
+        return questionService.getLevelQuestions(level);
     }
 
     // 질문 등록

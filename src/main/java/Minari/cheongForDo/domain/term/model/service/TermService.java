@@ -34,7 +34,18 @@ public class TermService {
         private final UserSessionHolder userSessionHolder;
 
         // 용어 전체 조회
-        public ResponseData<List<TermResponseDTO>> getTerms(TermDifficulty level) {
+        public ResponseData<List<TermResponseDTO>> getTerms() {
+
+                List<Term> termList = termRepository.findAll();
+
+                return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
+                        termList.stream().map(
+                                TermResponseDTO::of
+                        ).toList());
+        }
+
+        // 용어 난이도 별 조회
+        public ResponseData<List<TermResponseDTO>> getLevelTerms(TermDifficulty level) {
 
                 List<Term> termList = termRepository.findAllByTermDifficulty(level);
 

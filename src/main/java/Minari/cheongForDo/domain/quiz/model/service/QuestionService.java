@@ -34,13 +34,24 @@ QZ   QT   QZ-QT
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class QuestionService { //
+public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final UserSessionHolder userSessionHolder;
 
     // 질문 전체 조회
-    public ResponseData<List<QuestionResponseDTO>> getQuestions(QuestionDifficulty level) {
+    public ResponseData<List<QuestionResponseDTO>> getQuestions() {
+
+        List<Question> questionList = questionRepository.findAll();
+
+        return ResponseData.of(HttpStatus.OK, "질문 전체 조회 성공!",
+                questionList.stream().map(
+                        QuestionResponseDTO::of
+                ).toList());
+    }
+
+    // 질문 난이도 별 조회
+    public ResponseData<List<QuestionResponseDTO>> getLevelQuestions(QuestionDifficulty level) {
 
         List<Question> questionList = questionRepository.findAllByQtDifficulty(level);
 
@@ -60,6 +71,7 @@ public class QuestionService { //
                 .qtContents(createDTO.getQtContents())
                 .qtAnswer(createDTO.getQtAnswer())
                 .qtCmt(createDTO.getQtCmt())
+                .qtTip(createDTO.getQtTip())
                 .qtDifficulty(createDTO.getQtDifficulty())
                 .build();
 
