@@ -31,6 +31,7 @@ QZ   QT   QZ-QT
 1    1-10  1-1 1-2 1-3 1-4 ... 1-10 // Relational (MySQL, MariaDB, ...etc)
 * */
 
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -42,23 +43,23 @@ public class QuestionService {
     // 질문 전체 조회
     public ResponseData<List<QuestionResponseDTO>> getQuestions() {
 
-        List<Question> questionList = questionRepository.findAll();
+        List<Question> questionLists = questionRepository.findAll();
 
         return ResponseData.of(HttpStatus.OK, "질문 전체 조회 성공!",
-                questionList.stream().map(
+                questionLists.stream().map(
                         QuestionResponseDTO::of
                 ).toList());
     }
 
     // 질문 난이도 별 조회
-    public ResponseData<List<QuestionResponseDTO>> getLevelQuestions(QuestionDifficulty level) {
+    public ResponseData<List<QuestionResponseDTO>> getLevelQuestions(Long level) {
 
-        List<Question> questionList = questionRepository.findAllByQtDifficulty(level);
+        List<Question> questionList = checkQuestionLevel(level);
 
         return ResponseData.of(HttpStatus.OK, "질문 난이도 별 조회 성공!",
                 questionList.stream().map(
-                QuestionResponseDTO::of
-        ).toList());
+                        QuestionResponseDTO::of
+                ).toList());
     }
 
     // 질문 생성
@@ -77,19 +78,17 @@ public class QuestionService {
 
         questionRepository.save(question);
 
-        return Response.of(HttpStatus.OK, "질문 생성 성공 !");
+        return Response.of(HttpStatus.OK, "질문 생성 성공!");
     }
 
     // 질문 하나 조회
     public ResponseData<QuestionResponseDTO> findOneQuestion(Long qtIdx) {
 
-        Question question = questionRepository.findById(qtIdx).orElseThrow(
-                () -> new CustomException(QUESTION_NOT_EXIST)
-        );
+        Question getQuestion = getQuestion(qtIdx);
 
         return ResponseData.of(HttpStatus.OK,
-                "질문 하나 조회 성공!",
-                QuestionResponseDTO.of(question));
+                "질문 조회 성공!",
+                QuestionResponseDTO.of(getQuestion));
     }
 
     // 질문 수정
@@ -98,13 +97,11 @@ public class QuestionService {
 
         checkMemberAuthority(curMember);
 
-        Question question = questionRepository.findById(qtIdx).orElseThrow(
-                () -> new CustomException(QUESTION_NOT_EXIST)
-        );
+        Question getQuestion = getQuestion(qtIdx);
 
-        question.update(requestDTO);
+        getQuestion.update(requestDTO);
 
-        return ResponseData.of(HttpStatus.OK, "질문 수정 성공!", question.getQtIdx());
+        return ResponseData.of(HttpStatus.OK, "질문 수정 성공!", getQuestion.getQtIdx());
     }
 
     // 질문 삭제
@@ -114,16 +111,35 @@ public class QuestionService {
 
         checkMemberAuthority(curMember);
 
-        Question question = questionRepository.findById(qtIdx)
-                .orElseThrow(() -> new CustomException(QUESTION_NOT_EXIST));
+        Question getQuestion = getQuestion(qtIdx);
 
-        questionRepository.delete(question);
-        return Response.of(HttpStatus.OK, "질문 삭제 성공 !");
+        questionRepository.delete(getQuestion);
+        return Response.of(HttpStatus.OK, "질문 삭제 성공!");
     }
 
     private void checkMemberAuthority(MemberEntity curMember) {
         if (curMember.getAuthority() != MemberAccountType.ROLE_ADMIN) {
             throw new CustomException(MEMBER_NOT_AUTHORITY);
         }
+    }
+
+    private List<Question> checkQuestionLevel(Long level) {
+
+        if (level.intValue() == 1) {
+            return questionRepository.findAllByQtDifficulty(QuestionDifficulty.LV_1);
+        }
+        else if (level.intValue() == 2) {
+            return questionRepository.findAllByQtDifficulty(QuestionDifficulty.LV_2);
+        }
+        else {
+            return questionRepository.findAllByQtDifficulty(QuestionDifficulty.LV_3);
+        }
+
+    }
+
+    private Question getQuestion(Long qtIdx) {
+        return questionRepository.findById(qtIdx).orElseThrow(
+                () -> new CustomException(QUESTION_NOT_EXIST)
+        );
     }
 }

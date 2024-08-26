@@ -36,18 +36,18 @@ public class TermService {
         // 용어 전체 조회
         public ResponseData<List<TermResponseDTO>> getTerms() {
 
-                List<Term> termList = termRepository.findAll();
+                List<Term> termLists = termRepository.findAll();
 
                 return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
-                        termList.stream().map(
+                        termLists.stream().map(
                                 TermResponseDTO::of
                         ).toList());
         }
 
         // 용어 난이도 별 조회
-        public ResponseData<List<TermResponseDTO>> getLevelTerms(TermDifficulty level) {
+        public ResponseData<List<TermResponseDTO>> getLevelTerms(Long level) {
 
-                List<Term> termList = termRepository.findAllByTermDifficulty(level);
+                List<Term> termList = checkQuestionLevel(level);
 
                 return ResponseData.of(HttpStatus.OK, "용어 난이도 별 조회 성공!",
                         termList.stream().map(
@@ -75,11 +75,9 @@ public class TermService {
         // 용어 하나 조회
         public ResponseData<TermResponseDTO> findOneTerm(String termNm) {
 
-                Term term = termRepository.findById(termNm).orElseThrow(
-                        () -> new CustomException(TERM_NOT_EXIST)
-                );
+                Term getTerm = getBoard(termNm);
 
-                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(term));
+                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(getTerm));
         }
 
         // 용어 수정
@@ -89,14 +87,11 @@ public class TermService {
 
                 checkMemberAuthority(curMember);
 
-                Term term = termRepository.findById(termNm).orElseThrow(
-                        () -> new CustomException(TERM_NOT_EXIST)
+                Term getTerm = getBoard(termNm);
 
-                );
+                getTerm.update(requestDTO);
 
-                term.update(requestDTO);
-
-                return ResponseData.of(HttpStatus.OK, "용어 수정 성공!", term.getTermNm());
+                return ResponseData.of(HttpStatus.OK, "용어 수정 성공!", getTerm.getTermNm());
         }
 
         // 용어 삭제
@@ -106,14 +101,12 @@ public class TermService {
 
                 checkMemberAuthority(curMember);
 
-                Term term = termRepository.findById(termNm).orElseThrow(
-                        () -> new CustomException(TERM_NOT_EXIST)
-                );
+                Term getTerm = getBoard(termNm);
 
-                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, term);
+                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
                 like.ifPresent(likeRepository::delete);
 
-                termRepository.delete(term);
+                termRepository.delete(getTerm);
 
                 return Response.of(HttpStatus.OK, "용어 삭제 성공!");
         }
@@ -124,4 +117,23 @@ public class TermService {
                 }
         }
 
+        private List<Term> checkQuestionLevel(Long level) {
+
+                if (level.intValue() == 1) {
+                        return termRepository.findAllByTermDifficulty(TermDifficulty.LV_1);
+                }
+                else if (level.intValue() == 2) {
+                        return termRepository.findAllByTermDifficulty(TermDifficulty.LV_2);
+                }
+                else {
+                        return termRepository.findAllByTermDifficulty(TermDifficulty.LV_3);
+                }
+
+        }
+
+        private Term getBoard(String termNm) {
+            return termRepository.findById(termNm).orElseThrow(
+                        () -> new CustomException(TERM_NOT_EXIST)
+                );
+        }
 }

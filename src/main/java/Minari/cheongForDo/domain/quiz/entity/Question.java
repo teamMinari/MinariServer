@@ -23,7 +23,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Table(name = "Question")
-public class Question { // 질문 카테고리를 만들어야 할 수도 있음
+public class Question {
 
     // 질문 Idx
     @Id

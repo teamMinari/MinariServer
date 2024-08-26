@@ -2,7 +2,6 @@ package Minari.cheongForDo.domain.term.controller;
 
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
-import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import Minari.cheongForDo.domain.term.model.service.TermService;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
@@ -32,8 +31,8 @@ public class TermController {
     }
 
     // 용어 난이도 별 조회
-    @GetMapping("/level")
-    public ResponseData<List<TermResponseDTO>> getLevelTerms(TermDifficulty level) {
+    @GetMapping("/level/{level}")
+    public ResponseData<List<TermResponseDTO>> getLevelTerms(@PathVariable Long level) {
         return termService.getLevelTerms(level);
     }
 

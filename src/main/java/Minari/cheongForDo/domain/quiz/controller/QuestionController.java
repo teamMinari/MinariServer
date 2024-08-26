@@ -34,8 +34,8 @@ public class QuestionController {
     }
 
     // 질문 난이도 별 조회
-    @GetMapping("/level")
-    public ResponseData<List<QuestionResponseDTO>> getLevelQuestions(QuestionDifficulty level) {
+    @GetMapping("/level/{level}")
+    public ResponseData<List<QuestionResponseDTO>> getLevelQuestions(@PathVariable Long level) {
         return questionService.getLevelQuestions(level);
     }
 
