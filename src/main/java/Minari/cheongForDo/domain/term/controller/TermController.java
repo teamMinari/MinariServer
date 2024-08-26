@@ -30,6 +30,12 @@ public class TermController {
         return termService.getTerms();
     }
 
+    // 용어 난이도 별 조회
+    @GetMapping("/level/{level}")
+    public ResponseData<List<TermResponseDTO>> getLevelTerms(@PathVariable Long level) {
+        return termService.getLevelTerms(level);
+    }
+
     // 용어 등록
     @PostMapping
     public Response createTerm(@RequestBody TermRequestDTO requestDTO) {

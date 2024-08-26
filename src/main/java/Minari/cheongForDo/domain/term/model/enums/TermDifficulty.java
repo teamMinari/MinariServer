@@ -1,7 +1,7 @@
 package Minari.cheongForDo.domain.term.model.enums;
 
 public enum TermDifficulty {
-    lv_1,
-    lv_2,
-    lv_3,
+    LV_1,
+    LV_2,
+    LV_3,
 }
