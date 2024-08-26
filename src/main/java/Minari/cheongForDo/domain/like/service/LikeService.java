@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class LikeService {
+public class LikeService { // 대규모 수정 필요..
     private final LikeRepository likeRepository;
     private final UserSessionHolder userSessionHolder;
     private final TermRepository termRepository;

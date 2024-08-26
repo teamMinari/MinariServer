@@ -24,7 +24,10 @@ public enum CustomErrorCode {
     JWT_WAS_EXPIRED(HttpStatus.FORBIDDEN, "J-1", "토큰이 만료되었습니다."),
 
     // 퀴즈 관련 오류
-    QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다.");
+    QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다."),
+
+    // 튜토리얼 관련 오류
+    GRAPESEED_NOT_EXIST(HttpStatus.NOT_FOUND, "G-1", "포도씨가 존재하지 않습니다.");
 
     private final HttpStatus code;
     private final String status;

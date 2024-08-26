@@ -1,7 +1,9 @@
 package Minari.cheongForDo.domain.like.entity;
 
+import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.entity.Term;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -12,11 +14,14 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity(name = "tbl_like")
 @Getter
 @NoArgsConstructor
+@SuperBuilder
 public class Like {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long likeIdx;
@@ -29,11 +34,7 @@ public class Like {
     @JoinColumn(name = "fk_term_id")
     private Term term;
 
-    @Builder
-    public Like(Long likeIdx, MemberEntity member, Term term) {
-        this.likeIdx = likeIdx;
-        this.member = member;
-        this.term = term;
-    }
+    @Column
+    private LikeCategory likeCategory;
 
 }
