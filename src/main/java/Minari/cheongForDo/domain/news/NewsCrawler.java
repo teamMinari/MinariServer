@@ -53,7 +53,6 @@ public class NewsCrawler {
             }
             return res;
         } catch (IOException | InterruptedException e) {
-            // alphano z
             e.printStackTrace();
             throw new CustomException(CustomErrorCode.SERVER_ERROR);
         }
