@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_URL}:3306/cheongForDo_database?serverTimezone=Asia/Seoul
+    url: ${DB_URL}
     #    jdbc:mysql://localhost:3306/cheong?serverTimezone=Asia/Seoul
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
