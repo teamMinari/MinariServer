@@ -17,6 +17,9 @@ public enum CustomErrorCode {
     PASSWORDS_DO_NOT_MATCH(HttpStatus.BAD_REQUEST, "M-4", "비밀번호가 일치하지 않습니다."),
     MEMBER_NOT_AUTHORITY(HttpStatus.FORBIDDEN, "M-5", "멤버의 권한이 없습니다."),
 
+    // 뉴스 관련 오류
+    INVALID_NEWS_CATEGORY(HttpStatus.BAD_REQUEST, "NEWS-1", "카테고리가 잘못 되었습니다."),
+
     // 용어 관련 오류
     TERM_NOT_EXIST(HttpStatus.NOT_FOUND, "T-1", "용어가 존재하지 않습니다."),
 
