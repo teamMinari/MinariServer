@@ -22,7 +22,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class GrapeSeed {
+public class GrapeSeed { // learn, like 만들어보고 유저 변동을 갖고 있어야 하는 지 고민해보기
 
     // 포도씨 id
     @Id
@@ -43,7 +43,12 @@ public class GrapeSeed {
 
     // 포도씨 학습 여부, 유저 변동
     @Column(nullable = false)
-    private boolean gpseTF = false;
+    private Boolean gpseTF;
+
+    // 포도씨 좋아요 여부, 유저 변동
+    @Column(nullable = false)
+    @Getter
+    private Boolean gpseLike;
 
     // 포도씨 경험치 양
     @Column(nullable = false)
@@ -57,6 +62,11 @@ public class GrapeSeed {
     @Column
     private String gpseUrl;
 
+    // 포도씨 관련 용어 이름 리스트
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<Term> termNameList;
+
     public void update(GrapeSeedUpdateReq updateReq) {
         this.gpseName = updateReq.gpseName();
         this.gpseContent = updateReq.gpseContent();
@@ -64,5 +74,21 @@ public class GrapeSeed {
         this.gpseExp = updateReq.gpseExp();
         this.gpseQtId = updateReq.gpseQtId();
         this.gpseUrl = updateReq.gpseUrl();
+    }
+
+    public void GpseLikeFalse() {
+        this.gpseLike = false;
+    }
+
+    public void GpseLikeTrue() {
+        this.gpseLike = true;
+    }
+
+    public void GpseTFFalse() {
+        this.gpseTF = false;
+    }
+
+    public void GpseTFTrue() {
+        this.gpseTF = true;
     }
 }

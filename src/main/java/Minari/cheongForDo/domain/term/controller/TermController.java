@@ -43,21 +43,21 @@ public class TermController {
     }
 
     // 용어 하나 조회
-    @GetMapping("{termNm}")
-    public ResponseData<TermResponseDTO> getTerm(@PathVariable String termNm) {
-        return termService.findOneTerm(termNm);
+    @GetMapping("{termId}")
+    public ResponseData<TermResponseDTO> getTerm(@PathVariable Long termId) {
+        return termService.findOneTerm(termId);
     }
 
     // 용어 수정
     @PatchMapping
-    public ResponseData<String> updateTerm(@RequestParam String termNm, @RequestBody TermRequestDTO requestDTO) {
-        return termService.update(termNm, requestDTO);
+    public ResponseData<String> updateTerm(@RequestParam Long termId, @RequestBody TermRequestDTO requestDTO) {
+        return termService.update(termId, requestDTO);
     }
 
     // 용어 삭제
     @DeleteMapping
-    public Response deleteTerm(@RequestParam String termNm) {
-        return termService.deleteTerm(termNm);
+    public Response deleteTerm(@RequestParam Long termId) {
+        return termService.deleteTerm(termId);
     }
 
 }

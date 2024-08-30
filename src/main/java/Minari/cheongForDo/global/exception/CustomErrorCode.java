@@ -27,7 +27,10 @@ public enum CustomErrorCode {
     QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다."),
 
     // 튜토리얼 관련 오류
-    GRAPESEED_NOT_EXIST(HttpStatus.NOT_FOUND, "G-1", "포도씨가 존재하지 않습니다.");
+    GRAPESEED_NOT_EXIST(HttpStatus.NOT_FOUND, "G-1", "포도씨가 존재하지 않습니다."),
+
+    // 학습 관련 오류
+    LEARN_ALREADY_EXIST(HttpStatus.CONFLICT, "L-1", "학습이 이미 완료되었습니다.");
 
     private final HttpStatus code;
     private final String status;
