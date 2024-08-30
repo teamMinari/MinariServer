@@ -1,5 +1,6 @@
 package Minari.cheongForDo.domain.like.repository;
 
+import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.entity.Term;
@@ -13,4 +14,5 @@ import java.util.Optional;
 public interface LikeRepository extends JpaRepository<Like, Long> {
     List<Like> findByMember(MemberEntity member);
     Optional<Like> findByMemberAndTerm(MemberEntity member, Term term);
+    Optional<Like> findByMemberAndGrapeSeed(MemberEntity member, GrapeSeed grapeSeed);
 }

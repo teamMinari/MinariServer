@@ -27,7 +27,7 @@ import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TermService {
+public class TermService { // 이름으로 하나 조회하는 거 만들어야 할 수도
 
         private final LikeRepository likeRepository;
         private final TermRepository termRepository;
@@ -73,21 +73,21 @@ public class TermService {
         }
 
         // 용어 하나 조회
-        public ResponseData<TermResponseDTO> findOneTerm(String termNm) {
+        public ResponseData<TermResponseDTO> findOneTerm(Long termId) {
 
-                Term getTerm = getBoard(termNm);
+                Term getTerm = getTerm(termId);
 
                 return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(getTerm));
         }
 
         // 용어 수정
         @Transactional
-        public ResponseData<String> update(String termNm, TermRequestDTO requestDTO) {
+        public ResponseData<String> update(Long termId, TermRequestDTO requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 checkMemberAuthority(curMember);
 
-                Term getTerm = getBoard(termNm);
+                Term getTerm = getTerm(termId);
 
                 getTerm.update(requestDTO);
 
@@ -96,12 +96,12 @@ public class TermService {
 
         // 용어 삭제
         @Transactional
-        public Response deleteTerm(String termNm) {
+        public Response deleteTerm(Long termId) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 checkMemberAuthority(curMember);
 
-                Term getTerm = getBoard(termNm);
+                Term getTerm = getTerm(termId);
 
                 Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
                 like.ifPresent(likeRepository::delete);
@@ -131,8 +131,8 @@ public class TermService {
 
         }
 
-        private Term getBoard(String termNm) {
-            return termRepository.findById(termNm).orElseThrow(
+        private Term getTerm(Long termId) {
+            return termRepository.findById(termId).orElseThrow(
                         () -> new CustomException(TERM_NOT_EXIST)
                 );
         }

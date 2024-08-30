@@ -1,67 +1,104 @@
 package Minari.cheongForDo.domain.like.service;
 
+import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
+import Minari.cheongForDo.domain.grapeSeed.repository.GrapeSeedRepository;
+import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
-import Minari.cheongForDo.global.exception.CustomErrorCode;
 import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.Response;
-import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
+
+import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPESEED_NOT_EXIST;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class LikeService {
+public class LikeService { // 포도송이, 포도알 이후 추가
     private final LikeRepository likeRepository;
     private final UserSessionHolder userSessionHolder;
     private final TermRepository termRepository;
+    private final GrapeSeedRepository grapeSeedRepository;
 
-    public Response toggle(String word){
+    public Response toggle(LikeCategory category, Long id) {
         MemberEntity curMember = userSessionHolder.current();
 
-        Term term = termRepository.findById(word)
-                .orElseThrow(()-> new CustomException(CustomErrorCode.TERM_NOT_EXIST));
-
-        Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, term);
-
-        if(like.isEmpty()){
-            addLike(curMember, term);
-            return Response.of(HttpStatus.OK, "단어장 추가 성공");
+        if (category == LikeCategory.TERM) {
+            likeTerm(curMember, id);
+        } else if (category == LikeCategory.GRAPESEED) {
+            likeGrapeSeed(curMember, id);
         }
-        else{
-            likeRepository.delete(like.get());
-            return Response.of(HttpStatus.OK, "단어장 삭제 성공");
-        }
+
+        return Response.of(HttpStatus.OK, "좋아요 생성/취소 성공!");
 
     }
 
-    private void addLike(MemberEntity member, Term term){
+
+    private void likeTerm(MemberEntity curMember, Long termId) {
+        Term getTerm = getTerm(termId);
+
+        Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
+
+        if (like.isEmpty()) {
+            addTermLike(curMember, getTerm);
+        } else {
+            likeRepository.delete(like.get());
+        }
+    }
+
+    private void likeGrapeSeed(MemberEntity curMember, Long gpseId) {
+        GrapeSeed getGrapeSeed = getGrapeSeed(gpseId);
+
+        Optional<Like> like = likeRepository.findByMemberAndGrapeSeed(curMember, getGrapeSeed);
+
+        if (like.isEmpty()) {
+            addGrapeSeedLike(curMember, getGrapeSeed);
+        } else {
+            likeRepository.delete(like.get());
+        }
+    }
+
+
+    private void addTermLike(MemberEntity member, Term term) {
         likeRepository.save(
                 Like.builder()
-                        .term(term)
                         .member(member)
+                        .term(term)
                         .build()
         );
     }
 
-    public ResponseData<List<Term>> getMy(){
-        MemberEntity curMember = userSessionHolder.current();
 
-        List<Like> likes =  likeRepository.findByMember(curMember);
-        List<Term> terms = likes.stream()
-                .map(Like::getTerm)
-                .toList();
-
-        return ResponseData.of(HttpStatus.OK, "단어장 조회 성공", terms);
+    private void addGrapeSeedLike(MemberEntity member, GrapeSeed grapeSeed) {
+        likeRepository.save(
+                Like.builder()
+                        .member(member)
+                        .grapeSeed(grapeSeed)
+                        .build()
+        );
     }
+
+
+    private Term getTerm(Long termId) {
+        return termRepository.findById(termId).orElseThrow(
+                () -> new CustomException(TERM_NOT_EXIST)
+        );
+    }
+
+    private GrapeSeed getGrapeSeed(Long gpseId) {
+        return grapeSeedRepository.findById(gpseId).orElseThrow(
+                () -> new CustomException(GRAPESEED_NOT_EXIST));
+    }
+
 }
+

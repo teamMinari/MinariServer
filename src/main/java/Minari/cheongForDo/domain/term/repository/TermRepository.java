@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TermRepository extends JpaRepository<Term, String> {
+public interface TermRepository extends JpaRepository<Term, Long> {
 
     List<Term> findAllByTermDifficulty(TermDifficulty level);
 

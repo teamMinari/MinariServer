@@ -46,7 +46,6 @@ public class Question {
     @Column(nullable = false)
     private QuestionDifficulty qtDifficulty;
 
-    @Column(nullable = true)
     private String qtTip;
 
     public void update(QuestionRequestDTO requestDTO) {
