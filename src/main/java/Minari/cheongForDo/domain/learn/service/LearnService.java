@@ -1,5 +1,7 @@
 package Minari.cheongForDo.domain.learn.service;
 
+import Minari.cheongForDo.domain.grape.entity.Grape;
+import Minari.cheongForDo.domain.grape.repository.GrapeRepository;
 import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.grapeSeed.repository.GrapeSeedRepository;
 import Minari.cheongForDo.domain.learn.entity.Learn;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPESEED_NOT_EXIST;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPE_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.LEARN_ALREADY_EXIST;
 
 @Service
@@ -27,12 +30,15 @@ public class LearnService {
     private final LearnRepository learnRepository;
     private final UserSessionHolder userSessionHolder;
     private final GrapeSeedRepository grapeSeedRepository;
+    private final GrapeRepository grapeRepository;
 
     public Response toggle(LearnCategory category, Long id) {
         MemberEntity curMember = userSessionHolder.current();
 
         if (category == LearnCategory.GRAPESEED) {
             likeGrapeSeed(curMember, id);
+        } else if (category == LearnCategory.GRAPE) {
+            likeGrape(curMember, id);
         }
 
         return Response.of(HttpStatus.OK, "학습 여부 등록 성공!");
@@ -51,6 +57,18 @@ public class LearnService {
         }
     }
 
+    private void likeGrape(MemberEntity curMember, Long gpId) {
+        Grape getGrape = getGrape(gpId);
+
+        Optional<Learn> learn = learnRepository.findByMemberAndGrape(curMember, getGrape);
+
+        if (learn.isEmpty()) {
+            addGrapeLearn(curMember, getGrape);
+        } else {
+            throw new CustomException(LEARN_ALREADY_EXIST);
+        }
+    }
+
 
     private void addGrapeSeedLearn(MemberEntity member, GrapeSeed grapeSeed) {
         learnRepository.save(
@@ -61,9 +79,23 @@ public class LearnService {
         );
     }
 
+    private void addGrapeLearn(MemberEntity member, Grape grape) {
+        learnRepository.save(
+                Learn.builder()
+                        .member(member)
+                        .grape(grape)
+                        .build()
+        );
+    }
+
 
     private GrapeSeed getGrapeSeed(Long gpseId) {
         return grapeSeedRepository.findById(gpseId).orElseThrow(
                 () -> new CustomException(GRAPESEED_NOT_EXIST));
+    }
+
+    private Grape getGrape(Long gpId) {
+        return grapeRepository.findById(gpId).orElseThrow(
+                () -> new CustomException(GRAPE_NOT_EXIST));
     }
 }

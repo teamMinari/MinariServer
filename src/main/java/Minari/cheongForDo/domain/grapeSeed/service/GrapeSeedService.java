@@ -65,7 +65,6 @@ public class GrapeSeedService {
 
         GrapeSeed grapeSeed = commandReq.toEntity(getTermList);
 
-
         grapeSeedRepository.save(grapeSeed);
 
         return Response.of(HttpStatus.OK, "포도씨 생성 완료!");
@@ -82,7 +81,7 @@ public class GrapeSeedService {
         return Response.of(HttpStatus.OK, "포도씨 업데이트 완료!");
     }
 
-    public Response deleteGrapeSeed(Long gpseId) { // like, learn 함께 삭제하는 로직 필요
+    public Response deleteGrapeSeed(Long gpseId) {
 
         MemberEntity writer = userSessionHolder.current();
         checkMemberAuthority(writer);
@@ -91,6 +90,9 @@ public class GrapeSeedService {
 
         Optional<Like> like = likeRepository.findByMemberAndGrapeSeed(writer, getGrapeSeed);
         like.ifPresent(likeRepository::delete);
+
+        Optional<Learn> learn = learnRepository.findByMemberAndGrapeSeed(writer, getGrapeSeed);
+        learn.ifPresent(learnRepository::delete);
 
         grapeSeedRepository.delete(getGrapeSeed);
 

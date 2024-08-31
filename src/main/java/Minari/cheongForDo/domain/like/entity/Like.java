@@ -1,5 +1,6 @@
 package Minari.cheongForDo.domain.like.entity;
 
+import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
@@ -44,5 +45,9 @@ public class Like { // 포도송이, 포도알 연결 필요함
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fk_grapeSeed_id")
     private GrapeSeed grapeSeed;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_grape_id")
+    private Grape grape;
 
 }
