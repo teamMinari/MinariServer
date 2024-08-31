@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +24,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @SuperBuilder
-public class GrapeSeed { // learn, like 만들어보고 유저 변동을 갖고 있어야 하는 지 고민해보기
+public class GrapeSeed {
 
     // 포도씨 id
     @Id
@@ -47,7 +49,6 @@ public class GrapeSeed { // learn, like 만들어보고 유저 변동을 갖고 
 
     // 포도씨 좋아요 여부, 유저 변동
     @Column(nullable = false)
-    @Getter
     private Boolean gpseLike;
 
     // 포도씨 경험치 양
@@ -63,8 +64,8 @@ public class GrapeSeed { // learn, like 만들어보고 유저 변동을 갖고 
     private String gpseUrl;
 
     // 포도씨 관련 용어 이름 리스트
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable
     private List<Term> termNameList;
 
     public void update(GrapeSeedUpdateReq updateReq) {

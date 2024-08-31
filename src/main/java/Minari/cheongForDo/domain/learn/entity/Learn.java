@@ -1,5 +1,6 @@
 package Minari.cheongForDo.domain.learn.entity;
 
+import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.learn.enums.LearnCategory;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
@@ -37,4 +38,7 @@ public class Learn { // 포도송이, 포도알 연결 필요함
     @JoinColumn(name = "fk_grapeSeed_id")
     private GrapeSeed grapeSeed;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_grape_id")
+    private Grape grape;
 }

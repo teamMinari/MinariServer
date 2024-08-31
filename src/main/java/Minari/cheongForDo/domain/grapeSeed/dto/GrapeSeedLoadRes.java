@@ -26,8 +26,8 @@ public record GrapeSeedLoadRes(
                 grapeSeed.getGpseName(),
                 grapeSeed.getGpseContent(),
                 grapeSeed.getGpseTime(),
-                grapeSeed.getGpseTF(), // 이거 learn 만들어서 확인하는 로직 짜야 함..
-                grapeSeed.getGpseLike(),// 이거 like 만들어야 함
+                grapeSeed.getGpseTF(),
+                grapeSeed.getGpseLike(),
                 grapeSeed.getGpseExp(),
                 grapeSeed.getGpseQtId(),
                 grapeSeed.getGpseUrl(),

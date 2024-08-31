@@ -31,6 +31,7 @@ public enum CustomErrorCode {
 
     // 튜토리얼 관련 오류
     GRAPESEED_NOT_EXIST(HttpStatus.NOT_FOUND, "G-1", "포도씨가 존재하지 않습니다."),
+    GRAPE_NOT_EXIST(HttpStatus.NOT_FOUND, "G-2", "포도알이 존재하지 않습니다."),
 
     // 학습 관련 오류
     LEARN_ALREADY_EXIST(HttpStatus.CONFLICT, "L-1", "학습이 이미 완료되었습니다.");
