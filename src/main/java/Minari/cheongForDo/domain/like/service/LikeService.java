@@ -1,25 +1,31 @@
 package Minari.cheongForDo.domain.like.service;
 
+import Minari.cheongForDo.domain.grape.dto.GrapeLikeLoadRes;
 import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grape.repository.GrapeRepository;
+import Minari.cheongForDo.domain.grapeSeed.dto.GrapeSeedLikeLoadRes;
 import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.grapeSeed.repository.GrapeSeedRepository;
+import Minari.cheongForDo.domain.grapes.dto.GrapesLikeLoadRes;
 import Minari.cheongForDo.domain.grapes.entity.Grapes;
 import Minari.cheongForDo.domain.grapes.repository.GrapesRepository;
 import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
+import Minari.cheongForDo.domain.term.dto.TermLikeLoadRes;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
 import Minari.cheongForDo.global.response.Response;
+import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPESEED_NOT_EXIST;
@@ -53,6 +59,57 @@ public class LikeService { // 포도송이, 포도알 이후 추가
 
         return Response.of(HttpStatus.OK, "좋아요 생성/취소 성공!");
 
+    }
+
+
+    @Transactional
+    public ResponseData<List<TermLikeLoadRes>> myTerm() {
+        MemberEntity curMember = userSessionHolder.current();
+
+        List<Like> termLikes = likeRepository.findAllByMemberAndTermIsNotNull(curMember);
+
+        List<TermLikeLoadRes> term = termLikes.stream()
+                .map(like -> TermLikeLoadRes.of(like.getTerm()))
+                .toList();
+
+        return ResponseData.of(HttpStatus.OK, "저장된 용어 조회 성공!", term);
+
+    }
+
+    public ResponseData<List<GrapesLikeLoadRes>> myGrapes() {
+        MemberEntity curMember = userSessionHolder.current();
+
+        List<Like> grapesLikes = likeRepository.findAllByMemberAndGrapesIsNotNull(curMember);
+
+        List<GrapesLikeLoadRes> grapesRes = grapesLikes.stream()
+                .map(like -> GrapesLikeLoadRes.of(like.getGrapes()))
+                .toList();
+
+        return ResponseData.of(HttpStatus.OK, "저장된 포도송이 조회 성공!", grapesRes);
+    }
+
+    public ResponseData<List<GrapeLikeLoadRes>> myGrape() {
+        MemberEntity curMember = userSessionHolder.current();
+
+        List<Like> grapeLikes = likeRepository.findAllByMemberAndGrapeIsNotNull(curMember);
+
+        List<GrapeLikeLoadRes> grapeRes = grapeLikes.stream()
+                .map(like -> GrapeLikeLoadRes.of(like.getGrape()))
+                .toList();
+
+        return ResponseData.of(HttpStatus.OK, "저장된 포도알 조회 성공!", grapeRes);
+    }
+
+    public ResponseData<List<GrapeSeedLikeLoadRes>> myGrapeSeed() {
+        MemberEntity curMember = userSessionHolder.current();
+
+        List<Like> grapeSeedLikes = likeRepository.findAllByMemberAndGrapeSeedIsNotNull(curMember);
+
+        List<GrapeSeedLikeLoadRes> grapeSeedRes = grapeSeedLikes.stream()
+                .map(like -> GrapeSeedLikeLoadRes.of(like.getGrapeSeed()))
+                .toList();
+
+        return ResponseData.of(HttpStatus.OK, "저장된 포도씨 조회 성공!", grapeSeedRes);
     }
 
 

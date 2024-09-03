@@ -29,22 +29,22 @@ public class Learn { // 포도송이, 포도알 연결 필요함
     private Long learnIdx;
 
     @ManyToOne()
-    @JoinColumn(name = "fk_member_id")
+    @JoinColumn
     private MemberEntity member;
 
     @Enumerated(EnumType.STRING)
     private LearnCategory learnCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_grapeSeed_id")
+    @JoinColumn
     private GrapeSeed grapeSeed;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_grape_id")
+    @JoinColumn
     private Grape grape;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_grapes_id")
+    @JoinColumn
     private Grapes grapes;
 
 }

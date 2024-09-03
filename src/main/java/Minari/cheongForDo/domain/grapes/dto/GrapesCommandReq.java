@@ -1,7 +1,6 @@
 package Minari.cheongForDo.domain.grapes.dto;
 
 import Minari.cheongForDo.domain.grape.entity.Grape;
-import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.grapes.entity.Grapes;
 import Minari.cheongForDo.domain.grapes.enums.GrapesCategory;
 

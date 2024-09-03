@@ -6,7 +6,6 @@ import Minari.cheongForDo.domain.grapes.entity.Grapes;
 import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.entity.Term;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,7 +15,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -32,7 +30,7 @@ public class Like { // 포도송이, 포도알 연결 필요함
     private Long likeIdx;
 
     @ManyToOne()
-    @JoinColumn(name = "fk_member_id")
+    @JoinColumn
     private MemberEntity member;
 
     @Enumerated(EnumType.STRING)
@@ -40,19 +38,19 @@ public class Like { // 포도송이, 포도알 연결 필요함
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_term_id")
+    @JoinColumn
     private Term term;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_grapeSeed_id")
+    @JoinColumn
     private GrapeSeed grapeSeed;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_grape_id")
+    @JoinColumn
     private Grape grape;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_grapes_id")
+    @JoinColumn
     private Grapes grapes;
 
 }
