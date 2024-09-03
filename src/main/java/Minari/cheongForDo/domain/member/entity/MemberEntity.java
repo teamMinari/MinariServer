@@ -1,6 +1,7 @@
 package Minari.cheongForDo.domain.member.entity;
 
 
+import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -60,6 +63,14 @@ public class MemberEntity extends BaseTimeEntity {
     // 레벨
     @Column(name = "level", nullable = false)
     private Long level = 1L;
+
+    @ManyToMany
+    @JoinTable(
+            name = "member_grape",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "grape_id")
+    )
+    private List<Grape> grapes;
 
 
     @Builder
