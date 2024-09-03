@@ -51,6 +51,10 @@ public class MemberService {
             throw new CustomException(CustomErrorCode.MEMBER_ALREADY_EXIST);
         }
 
+        if (memberRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new CustomException(CustomErrorCode.EMAIL_ALREADY_EXIST);
+        }
+
         memberRepository.save(
                 MemberEntity.builder()
                         .id(dto.getId())
