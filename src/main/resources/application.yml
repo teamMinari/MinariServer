@@ -10,6 +10,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  ai:
+    openai:
+      api-key: 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
+      chat:
+        options:
+          model: gpt-4o
+          temperature: 0.6
 
 jwt:
   secret: ${JWT_SECRET}
