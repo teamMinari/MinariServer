@@ -39,31 +39,31 @@ public class LearnService {
         MemberEntity curMember = userSessionHolder.current();
 
         if (category == LearnCategory.GRAPESEED) {
-            likeGrapeSeed(curMember, id);
+            learnGrapeSeed(curMember, id);
         } else if (category == LearnCategory.GRAPE) {
-            likeGrape(curMember, id);
+            learnGrape(curMember, id);
         } else {
-            likeGrapes(curMember, id);
+            learnGrapes(curMember, id);
         }
 
         return Response.of(HttpStatus.OK, "학습 여부 등록 성공!");
     }
 
 
-    private void likeGrapeSeed(MemberEntity curMember, Long gpseId) {
+    private void learnGrapeSeed(MemberEntity curMember, Long gpseId) {
         GrapeSeed getGrapeSeed = getGrapeSeed(gpseId);
 
         Optional<Learn> learn = learnRepository.findByMemberAndGrapeSeed(curMember, getGrapeSeed);
 
         if (learn.isEmpty()) {
             addGrapeSeedLearn(curMember, getGrapeSeed);
-            // curMember.increaseExp(getGrapeSeed.getGpseExp());
+            curMember.increaseExp(getGrapeSeed.getGpseExp());
         } else {
             throw new CustomException(LEARN_ALREADY_EXIST);
         }
     }
 
-    private void likeGrape(MemberEntity curMember, Long gpId) {
+    private void learnGrape(MemberEntity curMember, Long gpId) {
         Grape getGrape = getGrape(gpId);
 
         Optional<Learn> learn = learnRepository.findByMemberAndGrape(curMember, getGrape);
@@ -75,7 +75,7 @@ public class LearnService {
         }
     }
 
-    private void likeGrapes(MemberEntity curMember, Long gpsId) {
+    private void learnGrapes(MemberEntity curMember, Long gpsId) {
         Grapes getGrapes = getGrapes(gpsId);
 
         Optional<Learn> learn = learnRepository.findByMemberAndGrapes(curMember, getGrapes);
