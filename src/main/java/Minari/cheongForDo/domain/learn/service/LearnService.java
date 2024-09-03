@@ -4,10 +4,11 @@ import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grape.repository.GrapeRepository;
 import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.grapeSeed.repository.GrapeSeedRepository;
+import Minari.cheongForDo.domain.grapes.entity.Grapes;
+import Minari.cheongForDo.domain.grapes.repository.GrapesRepository;
 import Minari.cheongForDo.domain.learn.entity.Learn;
 import Minari.cheongForDo.domain.learn.enums.LearnCategory;
 import Minari.cheongForDo.domain.learn.repository.LearnRepository;
-import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPESEED_NOT_EXIST;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPES_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPE_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.LEARN_ALREADY_EXIST;
 
@@ -31,6 +33,7 @@ public class LearnService {
     private final UserSessionHolder userSessionHolder;
     private final GrapeSeedRepository grapeSeedRepository;
     private final GrapeRepository grapeRepository;
+    private final GrapesRepository grapesRepository;
 
     public Response toggle(LearnCategory category, Long id) {
         MemberEntity curMember = userSessionHolder.current();
@@ -39,6 +42,8 @@ public class LearnService {
             likeGrapeSeed(curMember, id);
         } else if (category == LearnCategory.GRAPE) {
             likeGrape(curMember, id);
+        } else {
+            likeGrapes(curMember, id);
         }
 
         return Response.of(HttpStatus.OK, "학습 여부 등록 성공!");
@@ -52,6 +57,7 @@ public class LearnService {
 
         if (learn.isEmpty()) {
             addGrapeSeedLearn(curMember, getGrapeSeed);
+            // curMember.increaseExp(getGrapeSeed.getGpseExp());
         } else {
             throw new CustomException(LEARN_ALREADY_EXIST);
         }
@@ -64,6 +70,18 @@ public class LearnService {
 
         if (learn.isEmpty()) {
             addGrapeLearn(curMember, getGrape);
+        } else {
+            throw new CustomException(LEARN_ALREADY_EXIST);
+        }
+    }
+
+    private void likeGrapes(MemberEntity curMember, Long gpsId) {
+        Grapes getGrapes = getGrapes(gpsId);
+
+        Optional<Learn> learn = learnRepository.findByMemberAndGrapes(curMember, getGrapes);
+
+        if (learn.isEmpty()) {
+            addGrapesLearn(curMember, getGrapes);
         } else {
             throw new CustomException(LEARN_ALREADY_EXIST);
         }
@@ -88,6 +106,14 @@ public class LearnService {
         );
     }
 
+    private void addGrapesLearn(MemberEntity member, Grapes grapes) {
+        learnRepository.save(
+                Learn.builder()
+                        .member(member)
+                        .grapes(grapes)
+                        .build()
+        );
+    }
 
     private GrapeSeed getGrapeSeed(Long gpseId) {
         return grapeSeedRepository.findById(gpseId).orElseThrow(
@@ -97,5 +123,11 @@ public class LearnService {
     private Grape getGrape(Long gpId) {
         return grapeRepository.findById(gpId).orElseThrow(
                 () -> new CustomException(GRAPE_NOT_EXIST));
+    }
+
+    private Grapes getGrapes(Long gpsId) {
+        return grapesRepository.findById(gpsId).orElseThrow(
+                () -> new CustomException(GRAPES_NOT_EXIST)
+        );
     }
 }

@@ -15,8 +15,8 @@ public record GrapeCommandReq(
                 .gpName(gpName)
                 .gpTime(gpTime)
                 .gpseCntMax(grapeSeedList.size())
-                .gpseCnt(0)
-                .gpProgress(0)
+                .gpseCnt(0) // load 처리
+                .gpProgress(0) // load 처리
                 .gpTF(false)
                 .gpLike(false)
                 .gpExp(gpExp)

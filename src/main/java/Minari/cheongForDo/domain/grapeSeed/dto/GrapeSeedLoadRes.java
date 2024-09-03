@@ -15,7 +15,6 @@ public record GrapeSeedLoadRes(
             Long gpseQtId,
             String gpseUrl,
             List<String> termNmList
-            // List<GrapeSeedContentListRes> GrapeSeedContentListRes
 ) {
     public static GrapeSeedLoadRes of(GrapeSeed grapeSeed) {
         List<String> termNmList = grapeSeed.getTermNameList().stream()
@@ -36,12 +35,7 @@ public record GrapeSeedLoadRes(
     }
 
 
-//    public record GrapeSeedContentListRes(
-//            String asdfasf,
-//            String adfsf,
-//            Integer sgd
-//    ){
-//    }
+
 }
 
 

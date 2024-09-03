@@ -4,6 +4,8 @@ import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grape.repository.GrapeRepository;
 import Minari.cheongForDo.domain.grapeSeed.entity.GrapeSeed;
 import Minari.cheongForDo.domain.grapeSeed.repository.GrapeSeedRepository;
+import Minari.cheongForDo.domain.grapes.entity.Grapes;
+import Minari.cheongForDo.domain.grapes.repository.GrapesRepository;
 import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.like.entity.Like;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPESEED_NOT_EXIST;
+import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPES_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.GRAPE_NOT_EXIST;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST;
 
@@ -33,6 +36,7 @@ public class LikeService { // 포도송이, 포도알 이후 추가
     private final TermRepository termRepository;
     private final GrapeSeedRepository grapeSeedRepository;
     private final GrapeRepository grapeRepository;
+    private final GrapesRepository grapesRepository;
 
     public Response toggle(LikeCategory category, Long id) {
         MemberEntity curMember = userSessionHolder.current();
@@ -43,6 +47,8 @@ public class LikeService { // 포도송이, 포도알 이후 추가
             likeGrapeSeed(curMember, id);
         } else if (category == LikeCategory.GRAPE) {
             likeGrape(curMember, id);
+        } else {
+            likeGrapes(curMember, id);
         }
 
         return Response.of(HttpStatus.OK, "좋아요 생성/취소 성공!");
@@ -86,6 +92,18 @@ public class LikeService { // 포도송이, 포도알 이후 추가
         }
     }
 
+    private void likeGrapes(MemberEntity curMember, Long gpsId) {
+        Grapes getGrapes = getGrapes(gpsId);
+
+        Optional<Like> like = likeRepository.findByMemberAndGrapes(curMember, getGrapes);
+
+        if (like.isEmpty()) {
+            addGrapesLike(curMember, getGrapes);
+        } else {
+            likeRepository.delete(like.get());
+        }
+    }
+
 
     private void addTermLike(MemberEntity member, Term term) {
         likeRepository.save(
@@ -114,6 +132,15 @@ public class LikeService { // 포도송이, 포도알 이후 추가
         );
     }
 
+    private void addGrapesLike(MemberEntity member, Grapes grapes) {
+        likeRepository.save(
+                Like.builder()
+                        .member(member)
+                        .grapes(grapes)
+                        .build()
+        );
+    }
+
 
     private Term getTerm(Long termId) {
         return termRepository.findById(termId).orElseThrow(
@@ -131,5 +158,10 @@ public class LikeService { // 포도송이, 포도알 이후 추가
                 () -> new CustomException(GRAPE_NOT_EXIST));
     }
 
+    private Grapes getGrapes(Long gpsId) {
+        return grapesRepository.findById(gpsId).orElseThrow(
+                () -> new CustomException(GRAPES_NOT_EXIST)
+        );
+    }
 }
 

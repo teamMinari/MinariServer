@@ -8,10 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -77,19 +75,19 @@ public class GrapeSeed {
         this.gpseUrl = updateReq.gpseUrl();
     }
 
-    public void GpseLikeFalse() {
+    public void gpseLikeFalse() {
         this.gpseLike = false;
     }
 
-    public void GpseLikeTrue() {
+    public void gpseLikeTrue() {
         this.gpseLike = true;
     }
 
-    public void GpseTFFalse() {
+    public void gpseTFFalse() {
         this.gpseTF = false;
     }
 
-    public void GpseTFTrue() {
+    public void gpseTFTrue() {
         this.gpseTF = true;
     }
 }
