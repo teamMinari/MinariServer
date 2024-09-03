@@ -153,17 +153,17 @@ public class GrapeService {
 
     private void checkLike(Optional<Like> like, Grape getGrape) {
         if (like.isEmpty()) {
-            getGrape.GpLikeFalse();
+            getGrape.gpLikeFalse();
         } else {
-            getGrape.GpLikeTrue();
+            getGrape.gpLikeTrue();
         }
     }
 
     private void checkLearn(Optional<Learn> learn, Grape getGrape) {
         if (learn.isEmpty()) {
-            getGrape.GpTFFalse();
+            getGrape.gpTFFalse();
         } else {
-            getGrape.GpTFTrue();
+            getGrape.gpTFTrue();
         }
     }
 

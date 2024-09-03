@@ -8,10 +8,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -55,7 +53,7 @@ public class Grape {
     @Column(nullable = false)
     private Boolean gpTF;
 
-    // 포도씨 좋아요 여부, 유저 변동
+    // 포도알 좋아요 여부, 유저 변동
     @Column(nullable = false)
     private Boolean gpLike;
 
@@ -77,19 +75,23 @@ public class Grape {
         this.gpImg = updateReq.gpImg();
     }
 
-    public void GpLikeFalse() {
+    public void gpLikeFalse() {
         this.gpLike = false;
     }
 
-    public void GpLikeTrue() {
+    public void gpLikeTrue() {
         this.gpLike = true;
     }
 
-    public void GpTFFalse() {
+    public void gpTFFalse() {
         this.gpTF = false;
     }
 
-    public void GpTFTrue() {
+    public void gpTFTrue() {
         this.gpTF = true;
+    }
+
+    public void updateGpseCnt(Integer gpseCnt) {
+        this.gpseCnt = gpseCnt;
     }
 }

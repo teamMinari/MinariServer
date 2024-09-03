@@ -127,17 +127,17 @@ public class GrapeSeedService {
 
     private void checkLike(Optional<Like> like, GrapeSeed getGrapeSeed) {
         if (like.isEmpty()) {
-            getGrapeSeed.GpseLikeFalse();
+            getGrapeSeed.gpseLikeFalse();
         } else {
-            getGrapeSeed.GpseLikeTrue();
+            getGrapeSeed.gpseLikeTrue();
         }
     }
 
     private void checkLearn(Optional<Learn> learn, GrapeSeed getGrapeSeed) {
         if (learn.isEmpty()) {
-            getGrapeSeed.GpseTFFalse();
+            getGrapeSeed.gpseTFFalse();
         } else {
-            getGrapeSeed.GpseTFTrue();
+            getGrapeSeed.gpseTFTrue();
         }
     }
 }
