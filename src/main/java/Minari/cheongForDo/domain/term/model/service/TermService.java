@@ -15,6 +15,9 @@ import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +37,10 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         private final UserSessionHolder userSessionHolder;
 
         // 용어 전체 조회
-        public ResponseData<List<TermResponseDTO>> getTerms() {
+        public ResponseData<List<TermResponseDTO>> getTerms(int page, int size) {
+                Pageable pageable = PageRequest.of(page, size);
 
-                List<Term> termLists = termRepository.findAll();
+                Page<Term> termLists = termRepository.findAll(pageable);
 
                 return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
                         termLists.stream().map(

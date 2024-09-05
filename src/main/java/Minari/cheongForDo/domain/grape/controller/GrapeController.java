@@ -6,7 +6,10 @@ import Minari.cheongForDo.domain.grape.dto.GrapeUpdateReq;
 import Minari.cheongForDo.domain.grape.service.GrapeService;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,26 +25,35 @@ import java.util.List;
 @RestController
 @RequestMapping("/gp")
 @RequiredArgsConstructor
+@Tag(name = "GRAPE", description = "grape API")
 public class GrapeController {
 
     private final GrapeService grapeService;
 
     @GetMapping("{gpId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도알 일일 조회")
     public ResponseData<List<GrapeLoadRes>> findGrape(@PathVariable Long gpId) {
         return grapeService.findGrape(gpId);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도알 등록")
     public Response createGrape(@RequestBody GrapeCommandReq commandReq) {
         return grapeService.createGrape(commandReq);
     }
 
     @PatchMapping("{gpId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도알 업데이트")
     public Response updateGrape(@PathVariable Long gpId, @RequestBody GrapeUpdateReq updateReq) {
         return grapeService.updateGrape(gpId, updateReq);
     }
 
     @DeleteMapping("{gpId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도알 삭제")
     public Response deleteGrape(@PathVariable Long gpId) {
         return grapeService.deleteGrape(gpId);
     }
