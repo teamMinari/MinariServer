@@ -14,5 +14,6 @@ public interface TermRepository extends JpaRepository<Term, Long> {
 
     List<Term> findAllByTermDifficulty(TermDifficulty level);
 
+    Term findByTermNm(String termNm);
 
 }
