@@ -12,8 +12,8 @@ public class TermaryController {
 
     private final TermaryService termaryService;
 
-    @GetMapping("/summarize")
-    public String summarizeTerm(@RequestParam String termNm) {
+    @GetMapping("/summarize/{termNm}")
+    public String summarizeTerm(@PathVariable String termNm) {
         TermaryRequestDTO termaryRequestDTO = new TermaryRequestDTO();
         termaryRequestDTO.setTermNm(termNm);
         return termaryService.summarizeTerm(termaryRequestDTO);
