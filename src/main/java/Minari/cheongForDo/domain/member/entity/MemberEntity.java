@@ -63,13 +63,13 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "level", nullable = false)
     private Long level = 1L;
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_grape",
-            joinColumns = @JoinColumn(name = "member_id"),
-            inverseJoinColumns = @JoinColumn(name = "grape_id")
-    )
-    private Set<Grape> grapes;
+//    @ManyToMany
+//    @JoinTable(
+//            name = "member_grape",
+//            joinColumns = @JoinColumn(name = "member_id"),
+//            inverseJoinColumns = @JoinColumn(name = "grape_id")
+//    )
+//    private Set<Grape> grapes;
 
 
     @Builder
