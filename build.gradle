@@ -47,10 +47,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
-//	implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
-//	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT'
-
-
+	implementation 'org.jsoup:jsoup:1.18.1'
 }
 
 dependencyManagement {
