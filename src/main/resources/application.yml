@@ -4,19 +4,22 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/cheong?serverTimezone=Asia/Seoul
-    username: root
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
   ai:
     openai:
-      api-key: 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
+      api-key: ${OPENAI_API_KEY}
       chat:
         options:
-          model: gpt-4o
-          temperature: 0.6
+          model: gpt-3.5-turbo
+          temperature: 0.5
 
 jwt:
   secret: ${JWT_SECRET}
@@ -26,13 +29,6 @@ jwt:
 
 server:
   port: 8080
-
-admin:
-  id: minari
-  password: minari123!
-  email: minari@gmail.com
-  authority: ROLE_ADMIN
-
 
 logging:
   level:
