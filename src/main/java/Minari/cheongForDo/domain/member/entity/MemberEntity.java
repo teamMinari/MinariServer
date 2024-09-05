@@ -63,13 +63,10 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "level", nullable = false)
     private Long level = 1L;
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_grapes",  // 조인 테이블의 이름
-            joinColumns = @JoinColumn(name = "member_id"),
-            inverseJoinColumns = @JoinColumn(name = "grapes_id")
-    )
-    private List<Grapes> memberGps;
+    // 회원 포도송이 진행도 리스트
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable
+    private List<Grapes> gpsList;
 
 
     @Builder
@@ -84,7 +81,7 @@ public class MemberEntity extends BaseTimeEntity {
             MemberAccountType authority,
             String title,
             Long level,
-            List memberGps
+            List gpsList
     ) {
         this.idx = idx;
         this.id = id;
@@ -96,7 +93,7 @@ public class MemberEntity extends BaseTimeEntity {
         this.authority = authority;
         this.title = title;
         this.level = level;
-        this.memberGps = memberGps;
+        this.gpsList = gpsList;
     }
 
     private static final long[] REQUIRED_EXP_PER_LEVEL = {0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500};
