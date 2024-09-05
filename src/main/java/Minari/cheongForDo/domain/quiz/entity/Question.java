@@ -15,13 +15,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 @Table(name = "Question")
-public class Question { // 질문 카테고리를 만들어야 할 수도 있음
+public class Question {
 
     // 질문 Idx
     @Id
@@ -44,24 +46,14 @@ public class Question { // 질문 카테고리를 만들어야 할 수도 있음
     @Column(nullable = false)
     private QuestionDifficulty qtDifficulty;
 
-    @Builder
-    public Question(
-        String qtContents,
-        Boolean qtAnswer,
-        String qtCmt,
-        QuestionDifficulty qtDifficulty
-    ) {
-        this.qtContents = qtContents;
-        this.qtAnswer = qtAnswer;
-        this.qtCmt = qtCmt;
-        this.qtDifficulty = qtDifficulty;
-    }
+    private String qtTip;
 
     public void update(QuestionRequestDTO requestDTO) {
         this.qtContents = requestDTO.getQtContents();
         this.qtAnswer = requestDTO.getQtAnswer();
         this.qtCmt = requestDTO.getQtCmt();
         this.qtDifficulty = requestDTO.getQtDifficulty();
+        this.qtTip = requestDTO.getQtTip();
     }
 
 }

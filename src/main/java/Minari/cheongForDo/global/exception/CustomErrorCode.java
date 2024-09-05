@@ -18,6 +18,9 @@ public enum CustomErrorCode {
     MEMBER_NOT_AUTHORITY(HttpStatus.FORBIDDEN, "M-5", "멤버의 권한이 없습니다."),
     EMAIL_ALREADY_EXIST(HttpStatus.CONFLICT, "M-6", "이미 가입되어 있는 이메일입니다."),
 
+    // 뉴스 관련 오류
+    INVALID_NEWS_CATEGORY(HttpStatus.BAD_REQUEST, "NEWS-1", "카테고리가 잘못 되었습니다."),
+
     // 용어 관련 오류
     TERM_NOT_EXIST(HttpStatus.NOT_FOUND, "T-1", "용어가 존재하지 않습니다."),
 
@@ -25,7 +28,15 @@ public enum CustomErrorCode {
     JWT_WAS_EXPIRED(HttpStatus.FORBIDDEN, "J-1", "토큰이 만료되었습니다."),
 
     // 퀴즈 관련 오류
-    QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다.");
+    QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다."),
+
+    // 튜토리얼 관련 오류
+    GRAPESEED_NOT_EXIST(HttpStatus.NOT_FOUND, "G-1", "포도씨가 존재하지 않습니다."),
+    GRAPE_NOT_EXIST(HttpStatus.NOT_FOUND, "G-2", "포도알이 존재하지 않습니다."),
+    GRAPES_NOT_EXIST(HttpStatus.NOT_FOUND, "G-3", "포도송이가 존재하지 않습니다."),
+
+    // 학습 관련 오류
+    LEARN_ALREADY_EXIST(HttpStatus.CONFLICT, "L-1", "학습이 이미 완료되었습니다.");
 
     private final HttpStatus code;
     private final String status;

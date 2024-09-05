@@ -1,7 +1,11 @@
 package Minari.cheongForDo.domain.like.controller;
 
+import Minari.cheongForDo.domain.grape.dto.GrapeLikeLoadRes;
+import Minari.cheongForDo.domain.grapeSeed.dto.GrapeSeedLikeLoadRes;
+import Minari.cheongForDo.domain.grapes.dto.GrapesLikeLoadRes;
+import Minari.cheongForDo.domain.like.enums.LikeCategory;
 import Minari.cheongForDo.domain.like.service.LikeService;
-import Minari.cheongForDo.domain.term.entity.Term;
+import Minari.cheongForDo.domain.term.dto.TermLikeLoadRes;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +23,29 @@ import java.util.List;
 public class LikeController {
     private final LikeService likeService;
 
-    @GetMapping("/my")
-    public ResponseData<List<Term>> getMy(){
-        return likeService.getMy();
+    @PatchMapping
+    public Response patch(@RequestParam LikeCategory category, @RequestParam Long id) {
+        return likeService.toggle(category, id);
     }
 
-    @PatchMapping("/toggle")
-    public Response patch(@RequestParam String word){
-        return likeService.toggle(word);
+    @GetMapping("/term")
+    public ResponseData<List<TermLikeLoadRes>> myTerm() {
+        return likeService.myTerm();
     }
+
+    @GetMapping("/gps")
+    public ResponseData<List<GrapesLikeLoadRes>> myGrapes() {
+        return likeService.myGrapes();
+    }
+
+    @GetMapping("/gp")
+    public ResponseData<List<GrapeLikeLoadRes>> myGrape() {
+        return likeService.myGrape();
+    }
+
+    @GetMapping("/gpse")
+    public ResponseData<List<GrapeSeedLikeLoadRes>> myGrapeSeed() {
+        return likeService.myGrapeSeed();
+    }
+
 }

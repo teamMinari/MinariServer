@@ -7,6 +7,7 @@ import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
+import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
 import Minari.cheongForDo.global.exception.CustomException;
@@ -26,7 +27,7 @@ import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TermService {
+public class TermService { // 이름으로 하나 조회하는 거 만들어야 할 수도
 
         private final LikeRepository likeRepository;
         private final TermRepository termRepository;
@@ -35,9 +36,20 @@ public class TermService {
         // 용어 전체 조회
         public ResponseData<List<TermResponseDTO>> getTerms() {
 
-                List<Term> termList = termRepository.findAll();
+                List<Term> termLists = termRepository.findAll();
 
                 return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
+                        termLists.stream().map(
+                                TermResponseDTO::of
+                        ).toList());
+        }
+
+        // 용어 난이도 별 조회
+        public ResponseData<List<TermResponseDTO>> getLevelTerms(Long level) {
+
+                List<Term> termList = checkQuestionLevel(level);
+
+                return ResponseData.of(HttpStatus.OK, "용어 난이도 별 조회 성공!",
                         termList.stream().map(
                         TermResponseDTO::of
                 ).toList());
@@ -53,7 +65,6 @@ public class TermService {
                         .termNm(requestDTO.getTermNm())
                         .termExplain(requestDTO.getTermExplain())
                         .termDifficulty(requestDTO.getTermDifficulty())
-                        .termCategory(requestDTO.getTermCategory())
                         .build();
 
                 termRepository.save(term);
@@ -62,47 +73,40 @@ public class TermService {
         }
 
         // 용어 하나 조회
-        public ResponseData<TermResponseDTO> findOneTerm(String termNm) {
+        public ResponseData<TermResponseDTO> findOneTerm(Long termId) {
 
-                Term term = termRepository.findById(termNm).orElseThrow(
-                        () -> new CustomException(TERM_NOT_EXIST)
-                );
+                Term getTerm = getTerm(termId);
 
-                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(term));
+                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(getTerm));
         }
 
         // 용어 수정
         @Transactional
-        public ResponseData<String> update(String termNm, TermRequestDTO requestDTO) {
+        public ResponseData<String> update(Long termId, TermRequestDTO requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 checkMemberAuthority(curMember);
 
-                Term term = termRepository.findById(termNm).orElseThrow(
-                        () -> new CustomException(TERM_NOT_EXIST)
+                Term getTerm = getTerm(termId);
 
-                );
+                getTerm.update(requestDTO);
 
-                term.update(requestDTO);
-
-                return ResponseData.of(HttpStatus.OK, "용어 수정 성공!", term.getTermNm());
+                return ResponseData.of(HttpStatus.OK, "용어 수정 성공!", getTerm.getTermNm());
         }
 
         // 용어 삭제
         @Transactional
-        public Response deleteTerm(String termNm) {
+        public Response deleteTerm(Long termId) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 checkMemberAuthority(curMember);
 
-                Term term = termRepository.findById(termNm).orElseThrow(
-                        () -> new CustomException(TERM_NOT_EXIST)
-                );
+                Term getTerm = getTerm(termId);
 
-                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, term);
+                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
                 like.ifPresent(likeRepository::delete);
 
-                termRepository.delete(term);
+                termRepository.delete(getTerm);
 
                 return Response.of(HttpStatus.OK, "용어 삭제 성공!");
         }
@@ -113,4 +117,23 @@ public class TermService {
                 }
         }
 
+        private List<Term> checkQuestionLevel(Long level) {
+
+                if (level.intValue() == 1) {
+                        return termRepository.findAllByTermDifficulty(TermDifficulty.LV_1);
+                }
+                else if (level.intValue() == 2) {
+                        return termRepository.findAllByTermDifficulty(TermDifficulty.LV_2);
+                }
+                else {
+                        return termRepository.findAllByTermDifficulty(TermDifficulty.LV_3);
+                }
+
+        }
+
+        private Term getTerm(Long termId) {
+            return termRepository.findById(termId).orElseThrow(
+                        () -> new CustomException(TERM_NOT_EXIST)
+                );
+        }
 }

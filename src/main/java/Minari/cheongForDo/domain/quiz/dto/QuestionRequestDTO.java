@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class QuestionRequestDTO { // 용어?
+public class QuestionRequestDTO {
 
     @NotBlank
     private String qtContents;
@@ -20,6 +20,9 @@ public class QuestionRequestDTO { // 용어?
 
     @NotBlank
     private String qtCmt;
+
+    @NotBlank
+    private String qtTip;
 
     @NotBlank
     private QuestionDifficulty qtDifficulty;

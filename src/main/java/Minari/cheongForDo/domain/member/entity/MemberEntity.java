@@ -1,16 +1,16 @@
 package Minari.cheongForDo.domain.member.entity;
 
 
+import Minari.cheongForDo.domain.grape.entity.Grape;
+import Minari.cheongForDo.domain.grapes.entity.Grapes;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
-import groovy.grape.Grape;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 
 @Getter
@@ -63,13 +63,13 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "level", nullable = false)
     private Long level = 1L;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "member_grape",
-//            joinColumns = @JoinColumn(name = "member_id"),
-//            inverseJoinColumns = @JoinColumn(name = "grape_id")
-//    )
-//    private Set<Grape> grapes;
+    @ManyToMany
+    @JoinTable(
+            name = "member_grapes",  // 조인 테이블의 이름
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "grapes_id")
+    )
+    private List<Grapes> memberGps;
 
 
     @Builder
@@ -83,7 +83,8 @@ public class MemberEntity extends BaseTimeEntity {
             Long exp,
             MemberAccountType authority,
             String title,
-            Long level
+            Long level,
+            List memberGps
     ) {
         this.idx = idx;
         this.id = id;
@@ -95,6 +96,7 @@ public class MemberEntity extends BaseTimeEntity {
         this.authority = authority;
         this.title = title;
         this.level = level;
+        this.memberGps = memberGps;
     }
 
     private static final long[] REQUIRED_EXP_PER_LEVEL = {0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500};

@@ -22,6 +22,9 @@ public class QuestionResponseDTO { // qt 카테고리가 필요할 수도 있어
     private String qtCmt;
 
     @NotBlank
+    private String qtTip;
+
+    @NotBlank
     private QuestionDifficulty qtDifficulty;
 
 
@@ -30,6 +33,7 @@ public class QuestionResponseDTO { // qt 카테고리가 필요할 수도 있어
                 .qtContents(question.getQtContents())
                 .qtAnswer(question.getQtAnswer())
                 .qtCmt(question.getQtCmt())
+                .qtTip(question.getQtTip())
                 .qtDifficulty(question.getQtDifficulty()).build();
     }
 
