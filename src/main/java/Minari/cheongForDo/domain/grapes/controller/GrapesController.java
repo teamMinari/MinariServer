@@ -7,7 +7,10 @@ import Minari.cheongForDo.domain.grapes.dto.GrapesUpdateReq;
 import Minari.cheongForDo.domain.grapes.service.GrapesService;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,31 +26,43 @@ import java.util.List;
 @RestController
 @RequestMapping("/gps")
 @RequiredArgsConstructor
+@Tag(name = "GRAPES", description = "grapes API")
 public class GrapesController {
 
     private final GrapesService grapesService;
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도송이 전체 조회")
     public ResponseData<List<GrapesAllLoadRes>> findAllGrapes() {
         return grapesService.findAllGrapes();
     }
 
+
     @GetMapping("{gpsId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도송이 일일 조회")
     public ResponseData<GrapesLoadRes> findOneGrapes(@PathVariable Long gpsId) {
         return grapesService.findOneGrapes(gpsId);
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도송이 등록")
     public Response createGrapes(@RequestBody GrapesCommandReq commandReq) {
         return grapesService.createGrapes(commandReq);
     }
 
     @PatchMapping("{gpsId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도송이 업데이트")
     public Response updateGrapes(@PathVariable Long gpsId, @RequestBody GrapesUpdateReq updateReq) {
         return grapesService.updateGrapes(gpsId, updateReq);
     }
 
     @DeleteMapping("{gpsId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도송이 삭제")
     public Response deleteGrapes(@PathVariable Long gpsId) {
         return grapesService.deleteGrapes(gpsId);
     }
