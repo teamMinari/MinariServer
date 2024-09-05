@@ -32,9 +32,12 @@ public class TermController {
     // 용어 전체 조회
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "용어 전체 조회")
-    public ResponseData<List<TermResponseDTO>> getTerms() {
-        return termService.getTerms();
+    @Operation(summary = "용어 전체 조회", description = "아무것도 안 넣으면 20개씩 보여줍니다.")
+    public ResponseData<List<TermResponseDTO>> getTerms(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size
+    ) {
+        return termService.getTerms(page, size);
     }
 
     // 용어 난이도 별 조회
