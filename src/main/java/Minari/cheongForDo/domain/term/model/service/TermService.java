@@ -55,6 +55,13 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
                 ).toList());
         }
 
+        // 용어 이름으로 조회
+        public ResponseData<TermResponseDTO> getTermsWithNm(String termNm) {
+                TermResponseDTO termRes = TermResponseDTO.of(termRepository.findByTermNm(termNm));
+
+                return ResponseData.of(HttpStatus.OK, "용어 이름으로 조회 성공!", termRes);
+        }
+
         // 용어 생성
         public Response createTerm(TermRequestDTO requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();

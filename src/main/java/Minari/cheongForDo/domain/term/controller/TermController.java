@@ -48,6 +48,12 @@ public class TermController {
         return termService.findOneTerm(termId);
     }
 
+    // 용어 이름으로 조회
+    @GetMapping("/name/{termNm}")
+    public ResponseData<TermResponseDTO> getTermWithNm(@PathVariable String termNm) {
+        return termService.getTermsWithNm(termNm);
+    }
+
     // 용어 수정
     @PatchMapping
     public ResponseData<String> updateTerm(@RequestParam Long termId, @RequestBody TermRequestDTO requestDTO) {
