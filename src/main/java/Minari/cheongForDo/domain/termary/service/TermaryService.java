@@ -1,34 +1,58 @@
 package Minari.cheongForDo.domain.termary.service;
 
-import lombok.AllArgsConstructor;
+import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-@AllArgsConstructor
 public class TermaryService {
 
     private final RestTemplate restTemplate;
     private final String OPENAI_API_KEY = "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";
     private final String OPENAI_URL = "https://api.openai.com/v1/completions";
 
-    public String summarizeTerm(String termExplain) {
-        String prompt = "한국어로 이 설명을 청소년이 쉽게 이해할 수 있도록 요약해줘: " + termExplain;
+    @Autowired
+    public TermaryService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
-        String response = callOpenAiApi(prompt);
-
-        return response;
+    public String summarizeTerm(TermaryRequestDTO termaryRequestDTO) {
+        String termExplain = termaryRequestDTO.getTermExplain();
+        String prompt = "이 설명을 청소년이 이해할 수 있도록 요약해 주세요: " + termExplain;
+        return callOpenAiApi(prompt);
     }
 
     private String callOpenAiApi(String prompt) {
-        // API 호출을 위한 설정
-        // 예시: HTTP 요청 보내기
-        // 필요에 따라 적절한 요청 메소드(GET/POST)를 사용하세요.
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
+        headers.set("Content-Type", "application/json");
 
-        // 요청 본문 및 헤더 구성
-        String jsonResponse = ""; // 실제로 OpenAI API 호출 코드 작성
+        String requestBody = "{\"model\": \"text-davinci-003\", \"prompt\": \"" + prompt + "\", \"max_tokens\": 100}";
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        // API 응답 처리
-        return jsonResponse;
+        ResponseEntity<String> response = restTemplate.exchange(
+                OPENAI_URL,
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+
+        ObjectMapper mapper = new ObjectMapper();
+        String result = "";
+        try {
+            JsonNode root = mapper.readTree(response.getBody());
+            result = root.path("choices").get(0).path("text").asText();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result.trim();
     }
 }
