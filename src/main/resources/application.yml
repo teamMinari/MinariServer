@@ -5,7 +5,6 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
-    #    jdbc:mysql://localhost:3306/cheong?serverTimezone=Asia/Seoul
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   jpa:
@@ -14,6 +13,13 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-3.5-turbo
+          temperature: 0.5
 
 jwt:
   secret: ${JWT_SECRET}
