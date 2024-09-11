@@ -12,7 +12,8 @@ public enum NewsCategory {
     ECONOMY("economy", "https://news.naver.com/breakingnews/section/101/263"),
     REAL_ESTATE("realEstate", "https://news.naver.com/breakingnews/section/101/260"),
     INDUSTRIAL_BUSINESS("industrialBusiness", "https://news.naver.com/breakingnews/section/101/261"),
-
+    HOT_NEWS("hotNews", "https://news.naver.com/breakingnews/section/101"),
+    RANKIN("ranking", "https://news.naver.com/main/ranking/popularDay.naver?mid=etc&sid1=111")
     ;
     private final String incomingName;
     private final String url;
