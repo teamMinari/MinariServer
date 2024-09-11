@@ -1,7 +1,7 @@
-package Minari.cheongForDo.domain.news;
+package Minari.cheongForDo.domain.news.service;
 
 import Minari.cheongForDo.domain.news.dto.CrawlingResult;
-import Minari.cheongForDo.domain.news.dto.NewsCategory;
+import Minari.cheongForDo.domain.news.enums.NewsCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

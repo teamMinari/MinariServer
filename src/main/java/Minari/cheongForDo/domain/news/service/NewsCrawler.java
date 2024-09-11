@@ -1,4 +1,4 @@
-package Minari.cheongForDo.domain.news;
+package Minari.cheongForDo.domain.news.service;
 
 import Minari.cheongForDo.domain.news.dto.CrawlingResult;
 import Minari.cheongForDo.global.exception.CustomErrorCode;

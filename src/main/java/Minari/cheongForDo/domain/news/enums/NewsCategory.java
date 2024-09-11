@@ -1,4 +1,4 @@
-package Minari.cheongForDo.domain.news.dto;
+package Minari.cheongForDo.domain.news.enums;
 
 import Minari.cheongForDo.global.exception.CustomErrorCode;
 import Minari.cheongForDo.global.exception.CustomException;

@@ -1,5 +1,6 @@
-package Minari.cheongForDo.domain.news;
+package Minari.cheongForDo.domain.news.controller;
 
+import Minari.cheongForDo.domain.news.service.NewsService;
 import Minari.cheongForDo.domain.news.dto.CrawlingResult;
 import Minari.cheongForDo.global.response.ResponseData;
 import io.swagger.v3.oas.annotations.tags.Tag;
