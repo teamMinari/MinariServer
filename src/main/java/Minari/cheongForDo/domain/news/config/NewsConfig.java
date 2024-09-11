@@ -1,4 +1,4 @@
-package Minari.cheongForDo.domain.news;
+package Minari.cheongForDo.domain.news.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
