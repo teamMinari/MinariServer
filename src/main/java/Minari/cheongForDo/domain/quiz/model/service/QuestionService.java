@@ -21,17 +21,6 @@ import java.util.List;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.MEMBER_NOT_AUTHORITY;
 import static Minari.cheongForDo.global.exception.CustomErrorCode.QUESTION_NOT_EXIST;
 
-
-/*
-"quiz": {
-    "questions": [1, 2, 3, 4, ...]
-} // NoSQL (Mongodb, redis, ...etc) <<
-
-QZ   QT   QZ-QT
-1    1-10  1-1 1-2 1-3 1-4 ... 1-10 // Relational (MySQL, MariaDB, ...etc)
-* */
-
-
 @Service
 @Transactional
 @RequiredArgsConstructor
