@@ -1,6 +1,7 @@
 package Minari.cheongForDo.domain.termary.controller;
 
 import Minari.cheongForDo.domain.termary.service.TermaryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
@@ -8,6 +9,7 @@ import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
 @RequestMapping("/termary")
 @RestController
 @AllArgsConstructor
+@Tag(name = "TERMARY", description = "termary API")
 public class TermaryController {
 
     private final TermaryService termaryService;

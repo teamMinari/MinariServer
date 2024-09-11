@@ -31,7 +31,7 @@ public class Term {
     private String termNm;
 
     // 용어 내용
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10000)
     private String termExplain;
 
     // 용어 난이도

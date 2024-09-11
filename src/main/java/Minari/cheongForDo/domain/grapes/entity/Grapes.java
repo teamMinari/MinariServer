@@ -35,7 +35,7 @@ public class Grapes {
     private String gpsName;
 
     // 포도송이 내용
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10000)
     private String gpsContent;
 
     // 포도송이 시간

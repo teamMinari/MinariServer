@@ -49,7 +49,10 @@ public class NewsCrawler {
                 sel = div.selectFirst("div.sa_thumb img");
                 String thumbnail = sel != null ? sel.attr("data-src") : null;
 
-                res.add(new CrawlingResult(title, postUrl, company, thumbnail));
+                sel = div.selectFirst("div.sa_text_datetime is_recent");
+                String uploadTime = sel != null ? sel.text().strip() : null;
+
+                res.add(new CrawlingResult(title, postUrl, company, thumbnail, uploadTime));
             }
             return res;
         } catch (IOException | InterruptedException e) {

@@ -12,7 +12,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TermResponseDTO {
 
-    // 용어 이름
+    @NotBlank
+    private Long termId;
+
     @NotBlank
     private String termNm;
 
@@ -24,6 +26,7 @@ public class TermResponseDTO {
 
     public static TermResponseDTO of(Term term) {
         return TermResponseDTO.builder()
+                .termId(term.getTermId())
                 .termNm(term.getTermNm())
                 .termExplain(term.getTermExplain())
                 .termDifficulty(term.getTermDifficulty())

@@ -34,7 +34,7 @@ public class GrapeSeed {
     private String gpseName;
 
     // 포도씨 내용
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10000)
     private String gpseContent;
 
     // 학습 예정 시간

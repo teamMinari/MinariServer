@@ -9,4 +9,5 @@ public class CrawlingResult {
     private final String url;
     private final String company;
     private final String thumbnail;
+    private final String uploadTime;
 }
