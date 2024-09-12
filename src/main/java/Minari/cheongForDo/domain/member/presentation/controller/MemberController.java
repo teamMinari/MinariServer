@@ -1,23 +1,23 @@
 package Minari.cheongForDo.domain.member.presentation.controller;
 
-import Minari.cheongForDo.domain.member.presentation.dto.MemberExpResponseDTO;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberLoginDTO;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberRegisterDTO;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberResponseDTO;
+import Minari.cheongForDo.domain.member.presentation.dto.*;
 import Minari.cheongForDo.domain.member.service.MemberService;
 import Minari.cheongForDo.global.auth.JwtInfo;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
+@Tag(name = "MEMBER", description = "member API")
 public class MemberController {
 
     private final MemberService memberService;
@@ -47,15 +47,23 @@ public class MemberController {
     }
 
     // 포인트 지급
-    @PostMapping("/{memberId}/givePoint")
-    public Response givePoint(@PathVariable String memberId) {
-        return memberService.givePoint(memberId);
+    @PostMapping("/givePoint")
+    public ResponseEntity<MemberPointResponseDTO> givePoint(@RequestBody MemberPointRequestDTO request) {
+        MemberPointResponseDTO response = memberService.givePoint(request.getPointToAdd());
+        return ResponseEntity.ok(response);
     }
 
     // 경험치 지급
-    @PostMapping("/{memberId}/giveExp")
-    public ResponseData<MemberExpResponseDTO> giveExp(@RequestParam boolean isCorrectAnswer) {
-        return memberService.giveExp(isCorrectAnswer);
+    @PostMapping("/giveExp")
+    public ResponseEntity<MemberExpResponseDTO> giveExp(@RequestBody MemberExpRequestDTO request) {
+        MemberExpResponseDTO response = memberService.giveExp(request.getExpToAdd());
+        return ResponseEntity.ok(response);
     }
 
+    // 출석체크
+    @PostMapping("/check")
+    public ResponseEntity<MemberExpResponseDTO> checkAttendance(@RequestBody AttendanceRequestDTO request) {
+        MemberExpResponseDTO response = memberService.checkAttendance(request.getExpToAdd());
+        return ResponseEntity.ok(response);
+    }
 }

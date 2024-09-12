@@ -3,11 +3,8 @@ package Minari.cheongForDo.domain.member.service;
 
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberExpResponseDTO;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberLoginDTO;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberResponseDTO;
+import Minari.cheongForDo.domain.member.presentation.dto.*;
 import Minari.cheongForDo.domain.member.repository.MemberRepository;
-import Minari.cheongForDo.domain.member.presentation.dto.MemberRegisterDTO;
 import Minari.cheongForDo.global.auth.JwtInfo;
 import Minari.cheongForDo.global.auth.JwtUtils;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
@@ -26,6 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 import static Minari.cheongForDo.global.exception.CustomErrorCode.*;
@@ -65,6 +65,7 @@ public class MemberService {
                         .authority(MemberAccountType.ROLE_USER)
                         .title(null)
                         .level(1L)
+                        .checkLevel(1L)
                         .build()
         );
 
@@ -118,50 +119,49 @@ public class MemberService {
                 .authority(memberEntity.getAuthority())
                 .title(memberEntity.getTitle())
                 .level(memberEntity.getLevel())
+                .checkLevel(memberEntity.getCheckLevel()) // 보상 지급 단계
                 .totalExp(memberEntity.getTotalExp())
                 .build();
 
         return ResponseData.of(HttpStatus.OK, "회원 프로필 조회 성공!", memberResponseDTO);
     }
 
-    // 퀴즈를 맞힐 시 포인트 지급
-    public Response givePoint(String memberId) {
-        final int POINTS_FOR_CORRECT_ANSWER = 100;
-
-        Optional<MemberEntity> optionalUser = memberRepository.findById(memberId);
-        if (optionalUser.isPresent()) {
-            MemberEntity member = optionalUser.get();
-            member.setPoint(member.getPoint() + POINTS_FOR_CORRECT_ANSWER);
-            memberRepository.save(member);
-
-            return Response.of(HttpStatus.OK,"포인트 지급 성공!");
-        } else {
-            throw new CustomException(MEMBER_NOT_EXIST);
-        }
+    // 포인트 지급 로직
+    public MemberPointResponseDTO givePoint(long pointToAdd) {
+        MemberEntity member = userSessionHolder.current();
+        member.increasePoint(pointToAdd);  // 포인트 추가
+        memberRepository.save(member);
+        return MemberPointResponseDTO.of(member);  // 현재 포인트 정보 반환
     }
 
     // 경험치 지급 로직
-    public ResponseData<MemberExpResponseDTO> giveExp(boolean isCorrectAnswer) {
-        final int EXP_FOR_CORRECT_ANSWER = 20;
-        final int EXP_FOR_WRONG_ANSWER = 10;
+    public MemberExpResponseDTO giveExp(long expToAdd) {
+        MemberEntity member = userSessionHolder.current();
+        member.increaseExp(expToAdd);  // 경험치 추가 후 두 가지 레벨업 기준 체크
+        memberRepository.save(member);
+        return MemberExpResponseDTO.of(member);  // 현재 경험치와 레벨 정보 반환
+    }
 
-        try {
-            MemberEntity member = userSessionHolder.current();
+    // 출석 체크 로직
+    public MemberExpResponseDTO checkAttendance(long expToAdd) {
+        MemberEntity member = userSessionHolder.current();
+        LocalDate today = LocalDate.now();
+        long daysSkipped = getDaysSkipped(member, today);
+        long totalExpToAdd = expToAdd * (daysSkipped + 1); // 경험치 추가: 건너뛴 날도 포함
+        member.increaseExp(totalExpToAdd, true); // 출석 체크에 따른 경험치 추가
+        member.setLastAttendanceDate(LocalDateTime.now()); // 출석 날짜 업데이트
+        memberRepository.save(member);
 
-            long expToAdd = isCorrectAnswer ? EXP_FOR_CORRECT_ANSWER : EXP_FOR_WRONG_ANSWER;
+        return MemberExpResponseDTO.of(member);
+    }
 
-            member.increaseExp(expToAdd);
-            memberRepository.save(member);
-
-            long currentExp = member.getTotalExp();
-            String answerType = isCorrectAnswer ? "정답" : "오답";
-            String message = String.format("%s! 경험치 +%d. 현재 총 경험치: %d, 현재 레벨: %d",
-                    answerType, expToAdd, currentExp, member.getLevel());
-
-            return ResponseData.of(HttpStatus.OK, message, MemberExpResponseDTO.of(member));
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomException(SERVER_ERROR);
+    // 건너뛴 날 수 계산
+    private long getDaysSkipped(MemberEntity member, LocalDate today) {
+        if (member.getLastAttendanceDate() == null) {
+            return 1;  // 처음 출석할 때는 기본 1일 적용
         }
+        LocalDate lastCheckDate = member.getLastAttendanceDate().toLocalDate();
+        long daysBetween = ChronoUnit.DAYS.between(lastCheckDate, today);
+        return daysBetween > 1 ? daysBetween - 1 : 0;  // 건너뛴 날만큼 추가
     }
 }

@@ -1,7 +1,6 @@
 package Minari.cheongForDo.domain.member.entity;
 
 
-import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grapes.entity.Grapes;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import jakarta.persistence.*;
@@ -10,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -39,7 +39,7 @@ public class MemberEntity extends BaseTimeEntity {
     private String email;
 
     // 단어장
-    @Column(name = "vocaBook", nullable = true)
+    @Column(name = "vocaBook")
     private String vocaBook;
 
     // 포인트
@@ -63,11 +63,17 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "level", nullable = false)
     private Long level = 1L;
 
+    // 출석체크 보상
+    @Column(name = "checkLevel", nullable = false)
+    private Long checkLevel = 1L;
+
     // 회원 포도송이 진행도 리스트
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable
     private List<Grapes> gpsList;
 
+    @Column(name = "last_attendance_date")
+    private LocalDateTime lastAttendanceDate;
 
     @Builder
     public MemberEntity (
@@ -81,7 +87,8 @@ public class MemberEntity extends BaseTimeEntity {
             MemberAccountType authority,
             String title,
             Long level,
-            List gpsList
+            Long checkLevel,
+            List<Grapes> gpsList
     ) {
         this.idx = idx;
         this.id = id;
@@ -93,16 +100,35 @@ public class MemberEntity extends BaseTimeEntity {
         this.authority = authority;
         this.title = title;
         this.level = level;
+        this.checkLevel = checkLevel;
         this.gpsList = gpsList;
     }
 
+    // 경험치 레벨 기준
     private static final long[] REQUIRED_EXP_PER_LEVEL = {0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500};
 
+    // 보상(칭호) 해금 기준(?)
+    private static final long[] CHECK_LEVEL_EXP = {0, 70, 140, 210, 280, 350, 420, 490, 560, 630};
+
     public void increaseExp(long expToAdd) {
-        this.exp += expToAdd;
-        checkLevelUp();
+        increaseExp(expToAdd, false);
     }
 
+    public void increaseExp(long expToAdd, boolean isAttendanceCheck) {
+        this.exp += expToAdd; // 경험치가 실제로 추가되는지 확인
+        if (isAttendanceCheck) {
+            checkAttendanceLevelUp();  // 출석 체크 시 레벨업 체크
+        } else {
+            checkLevelUp();  // 일반 경험치 증가 시 레벨업 체크
+        }
+    }
+
+    // 포인트 추가 메서드
+    public void increasePoint(long pointToAdd) {
+        this.point += pointToAdd; // 포인트 추가
+    }
+
+    // 유저 레벨 체크 메서드
     private void checkLevelUp() {
         while (this.level < REQUIRED_EXP_PER_LEVEL.length - 1 && this.exp >= REQUIRED_EXP_PER_LEVEL[this.level.intValue()]) {
             this.exp -= REQUIRED_EXP_PER_LEVEL[this.level.intValue()];
@@ -110,11 +136,24 @@ public class MemberEntity extends BaseTimeEntity {
         }
     }
 
+    // 보상지급 레벨 체크 메서드
+    private void checkAttendanceLevelUp() {
+        while (this.checkLevel < CHECK_LEVEL_EXP.length - 1 && this.exp >= CHECK_LEVEL_EXP[this.checkLevel.intValue()]) {
+            this.exp -= CHECK_LEVEL_EXP[this.checkLevel.intValue()];
+            this.checkLevel++;
+        }
+    }
+
+    // 유저의 전체 경험치
     public long getTotalExp() {
-        long totalExp = this.exp;
+        long totalExp = 0;
+        // 이전 레벨까지의 총 경험치 더하기
         for (int i = 0; i < this.level; i++) {
             totalExp += REQUIRED_EXP_PER_LEVEL[i];
         }
+        // 현재 레벨에서 남아 있는 경험치 더하기
+        totalExp += this.exp;
         return totalExp;
     }
+
 }
