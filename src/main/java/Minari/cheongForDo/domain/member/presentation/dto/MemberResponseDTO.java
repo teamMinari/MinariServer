@@ -20,6 +20,7 @@ public class MemberResponseDTO {
     private MemberAccountType authority;
     private String title;
     private Long level;
+    private Long checkLevel; // 보상 해금 단계
     private Long totalExp;
 
     public static MemberResponseDTO of (MemberEntity member) {
@@ -33,6 +34,7 @@ public class MemberResponseDTO {
                 .authority(member.getAuthority())
                 .title(member.getTitle())
                 .level(member.getLevel())
+                .checkLevel(member.getCheckLevel())
                 .build();
     }
 }
