@@ -61,10 +61,18 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         }
 
         // 용어 이름으로 조회
-        public ResponseData<TermResponseDTO> getTermsWithNm(String termNm) {
-                TermResponseDTO termRes = TermResponseDTO.of(termRepository.findByTermNm(termNm));
+        public ResponseData<TermOneLoadLikeRes> getTermsWithNm(String termNm) {
+                MemberEntity curMember = userSessionHolder.current();
 
-                return ResponseData.of(HttpStatus.OK, "용어 이름으로 조회 성공!", termRes);
+                Term getTerm = termRepository.findByTermNm(termNm);
+
+                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
+
+                if (like.isEmpty()) {
+                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, false));
+                } else {
+                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, true));
+                }
         }
 
         // 용어 생성
@@ -85,18 +93,10 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         }
 
         // 용어 하나 조회
-        public ResponseData<TermOneLoadLikeRes> findOneTerm(Long termId) {
-                MemberEntity curMember = userSessionHolder.current();
-
+        public ResponseData<TermResponseDTO> findOneTerm(Long termId) {
                 Term getTerm = getTerm(termId);
 
-                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
-
-                if (like.isEmpty()) {
-                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, false));
-                } else {
-                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, true));
-                }
+                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(getTerm));
 
         }
 
