@@ -2,9 +2,7 @@ package Minari.cheongForDo.domain.quiz.controller;
 
 import Minari.cheongForDo.domain.quiz.dto.QuestionRequestDTO;
 import Minari.cheongForDo.domain.quiz.dto.QuestionResponseDTO;
-import Minari.cheongForDo.domain.quiz.model.enums.QuestionDifficulty;
 import Minari.cheongForDo.domain.quiz.model.service.QuestionService;
-import Minari.cheongForDo.global.response.BaseResponse;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
 import io.swagger.v3.oas.annotations.Operation;
