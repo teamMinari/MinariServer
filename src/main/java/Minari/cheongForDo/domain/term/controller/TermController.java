@@ -1,5 +1,6 @@
 package Minari.cheongForDo.domain.term.controller;
 
+import Minari.cheongForDo.domain.term.dto.TermOneLoadLikeRes;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.model.service.TermService;
@@ -60,7 +61,7 @@ public class TermController {
     @GetMapping("{termId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 일일 조회")
-    public ResponseData<TermResponseDTO> getTerm(@PathVariable Long termId) {
+    public ResponseData<TermOneLoadLikeRes> getTerm(@PathVariable Long termId) {
         return termService.findOneTerm(termId);
     }
 

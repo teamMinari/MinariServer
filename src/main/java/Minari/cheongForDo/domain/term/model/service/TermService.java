@@ -4,6 +4,7 @@ import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
+import Minari.cheongForDo.domain.term.dto.TermOneLoadLikeRes;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
@@ -84,11 +85,19 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         }
 
         // 용어 하나 조회
-        public ResponseData<TermResponseDTO> findOneTerm(Long termId) {
+        public ResponseData<TermOneLoadLikeRes> findOneTerm(Long termId) {
+                MemberEntity curMember = userSessionHolder.current();
 
                 Term getTerm = getTerm(termId);
 
-                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(getTerm));
+                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
+
+                if (like.isEmpty()) {
+                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, false));
+                } else {
+                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, true));
+                }
+
         }
 
         // 용어 수정
