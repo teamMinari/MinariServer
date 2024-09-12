@@ -61,7 +61,7 @@ public class TermController {
     @GetMapping("{termId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 일일 조회")
-    public ResponseData<TermOneLoadLikeRes> getTerm(@PathVariable Long termId) {
+    public ResponseData<TermResponseDTO> getTerm(@PathVariable Long termId) {
         return termService.findOneTerm(termId);
     }
 
@@ -69,7 +69,7 @@ public class TermController {
     @GetMapping("/name/{termNm}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 이름으로 조회", description = "이거 포도씨 안에 들어있는 용어 이름으로 조회하면 됩니다.")
-    public ResponseData<TermResponseDTO> getTermWithNm(@PathVariable String termNm) {
+    public ResponseData<TermOneLoadLikeRes> getTermWithNm(@PathVariable String termNm) {
         return termService.getTermsWithNm(termNm);
     }
 
