@@ -3,6 +3,7 @@ package Minari.cheongForDo.domain.termary.controller;
 import Minari.cheongForDo.domain.termary.service.TermaryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
 
