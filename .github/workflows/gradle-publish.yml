@@ -24,6 +24,7 @@ jobs:
         spring.datasource.url: ${{ secrets.DB_URL }}
         spring.datasource.username: ${{ secrets.DB_USERNAME }}
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
+        spring.datasource.jwt: ${{ secrets.JWT_SECRET }}
         spring.ai.openai.api-key: ${{ secrets.OPENAI_API_KEY }}
 
     - name: set chmod
