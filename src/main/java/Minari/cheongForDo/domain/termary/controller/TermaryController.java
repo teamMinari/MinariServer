@@ -11,6 +11,7 @@ import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "TERMARY", description = "termary API")
+@RequiredArgsConstructor
 public class TermaryController {
 
     private final TermaryService termaryService;
