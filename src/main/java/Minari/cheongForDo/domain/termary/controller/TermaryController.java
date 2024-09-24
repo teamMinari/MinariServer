@@ -2,14 +2,12 @@ package Minari.cheongForDo.domain.termary.controller;
 
 import Minari.cheongForDo.domain.termary.service.TermaryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
 
 @RequestMapping("/termary")
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "TERMARY", description = "termary API")
 @RequiredArgsConstructor
 public class TermaryController {

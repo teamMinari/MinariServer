@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/gp")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "GRAPE", description = "grape API")
 public class GrapeController {
 

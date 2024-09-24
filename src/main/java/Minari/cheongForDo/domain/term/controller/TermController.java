@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/terms")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "TERM", description = "term API")
 public class TermController {
     private final TermService termService;

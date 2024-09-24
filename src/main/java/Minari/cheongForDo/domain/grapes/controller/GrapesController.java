@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/gps")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "GRAPES", description = "grapes API")
 public class GrapesController {
 
