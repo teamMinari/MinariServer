@@ -8,7 +8,6 @@ import Minari.cheongForDo.domain.termary.dto.TermaryRequestDTO;
 
 @RequestMapping("/termary")
 @RestController
-@AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "TERMARY", description = "termary API")
 @RequiredArgsConstructor
