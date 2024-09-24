@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/questions")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @Tag(name = "QUESTION", description = "question API")
 public class QuestionController {
 
