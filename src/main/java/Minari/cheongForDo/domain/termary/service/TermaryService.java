@@ -23,7 +23,7 @@ public class TermaryService {
     private final RestTemplate restTemplate;
     private final TermRepository termRepository;
 
-    @Value("${OPENAI_API_KEY}")
+    @Value("${spring.ai.openai.api-key}")
     private String openaiApiKey;
 
     private final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
