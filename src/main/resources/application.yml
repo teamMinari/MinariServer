@@ -28,11 +28,11 @@ jwt:
     refresh: 604800000
 
 server:
-  port: 443
-  ssl:
-    key-store: ${SSL_PATH}
-    key-store-type: PKCS12
-    key-store-password: ${SSL_PASSWORD}
+  port: 8080
+#  ssl:
+#    key-store: ${SSL_PATH}
+#    key-store-type: PKCS12
+#    key-store-password: ${SSL_PASSWORD}
 
 logging:
   level:
