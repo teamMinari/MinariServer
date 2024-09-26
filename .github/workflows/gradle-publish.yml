@@ -28,8 +28,6 @@ jobs:
         spring.datasource.password: ${{ secrets.DB_PASSWORD }}
         jwt.secret: ${{ secrets.JWT_SECRET }}
         spring.ai.openai.api-key: ${{ secrets.OPENAI_API_KEY }}
-        SSL_PATH: ${{ secrets.SSL_PATH }}
-        SSL_PASSWORD: ${{ secrets.SSL_PASSWORD }}
 
     - name: set chmod
       run: chmod +x ./gradlew
@@ -56,4 +54,4 @@ jobs:
           docker rm cheong_for_do
           docker rmi ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
           docker pull ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
-          docker run -d -p 443:8080 --name cheong_for_do ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
+          docker run -d -p 8080:8080 --name cheong_for_do ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
