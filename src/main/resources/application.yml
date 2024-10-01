@@ -28,7 +28,7 @@ jwt:
     refresh: 604800000
 
 server:
-  port: 443
+  port: 8080
 
 logging:
   level:

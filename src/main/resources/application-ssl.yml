@@ -1,0 +1,6 @@
+server: # additional ssl settings
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: classpath:cheongfordo.p12
+    key-store-password: ${SSL_PASSWORD}

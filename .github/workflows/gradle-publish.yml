@@ -29,11 +29,19 @@ jobs:
         jwt.secret: ${{ secrets.JWT_SECRET }}
         spring.ai.openai.api-key: ${{ secrets.OPENAI_API_KEY }}
 
-    - name: set chmod
-      run: chmod +x ./gradlew
+    - name: set ssl yml file
+      uses: microsoft/variable-substitution@v1
+      with:
+        files: src/main/resources/application-ssl.yml
+      env:
+        server.ssl.key-store-password: ${{ secrets.SSL_PASSWORD }}
         
     - name: Build with Gradle
-      run: ./gradlew bootJar
+      run: |
+        echo '${{ secrets.CHEONGFORDO_P12 }}' | base64 --decode > ./src/main/resources/cheongfordo.p12
+        
+        chmod +x ./gradlew
+        ./gradlew bootJar
 
     - name: Docker build & push to prod
       run: |
@@ -54,4 +62,4 @@ jobs:
           docker rm cheong_for_do
           docker rmi ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
           docker pull ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
-          docker run -d -p 8080:8080 --name cheong_for_do ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
+          docker run -d -p 443:8080 --name cheong_for_do ${{ secrets.DOCKER_USERNAME }}/cheong_for_do:latest
