@@ -3,15 +3,15 @@ package Minari.cheongForDo.domain.term.dto;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 
-public record TermOneLoadLikeRes(
+public record TermOneLikeLoadRes(
         Long termId,
         String termNm,
         String termExplain,
         TermDifficulty termDifficulty,
         Boolean termLike
 ) {
-    public static TermOneLoadLikeRes of(Term term, Boolean termLike) {
-        return new TermOneLoadLikeRes(
+    public static TermOneLikeLoadRes of(Term term, Boolean termLike) {
+        return new TermOneLikeLoadRes(
                 term.getTermId(),
                 term.getTermNm(),
                 term.getTermExplain(),

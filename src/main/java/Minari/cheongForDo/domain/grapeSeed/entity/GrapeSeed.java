@@ -61,10 +61,15 @@ public class GrapeSeed {
     @Column
     private String gpseUrl;
 
+    // 포도씨 검증
+    @Column
+    private String gpseVerification;
+
     // 포도씨 관련 용어 이름 리스트
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable
     private List<Term> termNameList;
+
 
     public void update(GrapeSeedUpdateReq updateReq) {
         this.gpseName = updateReq.gpseName();
@@ -73,6 +78,10 @@ public class GrapeSeed {
         this.gpseExp = updateReq.gpseExp();
         this.gpseQtId = updateReq.gpseQtId();
         this.gpseUrl = updateReq.gpseUrl();
+    }
+
+    public void verUpdate(String verification) {
+        this.gpseVerification = verification;
     }
 
     public void gpseLikeFalse() {
