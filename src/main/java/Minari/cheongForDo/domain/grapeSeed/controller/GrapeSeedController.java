@@ -41,6 +41,13 @@ public class GrapeSeedController {
         return grapeSeedService.updateGrapeSeed(gpseId, updateReq);
     }
 
+    @PatchMapping("/ver/{gpseId}")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도씨 검증 업데이트")
+    public Response updateGrapeSeedVerification(@PathVariable Long gpseId, @RequestParam String verification) {
+        return grapeSeedService.updateGrapeSeedVerification(gpseId, verification);
+    }
+
     @DeleteMapping("{gpseId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "포도씨 삭제")

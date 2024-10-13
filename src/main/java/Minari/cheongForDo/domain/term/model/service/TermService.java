@@ -4,7 +4,7 @@ import Minari.cheongForDo.domain.like.entity.Like;
 import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
-import Minari.cheongForDo.domain.term.dto.TermOneLoadLikeRes;
+import Minari.cheongForDo.domain.term.dto.TermOneLikeLoadRes;
 import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
 import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
 import Minari.cheongForDo.domain.term.entity.Term;
@@ -31,7 +31,7 @@ import static Minari.cheongForDo.global.exception.CustomErrorCode.TERM_NOT_EXIST
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TermService { // 이름으로 하나 조회하는 거 만들어야 할 수도
+public class TermService {
 
         private final LikeRepository likeRepository;
         private final TermRepository termRepository;
@@ -61,7 +61,7 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         }
 
         // 용어 이름으로 조회
-        public ResponseData<TermOneLoadLikeRes> getTermsWithNm(String termNm) {
+        public ResponseData<TermOneLikeLoadRes> getTermsWithNm(String termNm) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 Term getTerm = termRepository.findByTermNm(termNm);
@@ -69,9 +69,9 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
                 Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
 
                 if (like.isEmpty()) {
-                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, false));
+                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLikeLoadRes.of(getTerm, false));
                 } else {
-                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLoadLikeRes.of(getTerm, true));
+                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLikeLoadRes.of(getTerm, true));
                 }
         }
 
@@ -101,7 +101,6 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         }
 
         // 용어 수정
-        @Transactional
         public ResponseData<String> update(Long termId, TermRequestDTO requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();
 
@@ -115,7 +114,6 @@ public class TermService { // 이름으로 하나 조회하는 거 만들어야 
         }
 
         // 용어 삭제
-        @Transactional
         public Response deleteTerm(Long termId) {
                 MemberEntity curMember = userSessionHolder.current();
 

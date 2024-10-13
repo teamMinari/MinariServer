@@ -81,6 +81,16 @@ public class GrapeSeedService {
         return Response.of(HttpStatus.OK, "포도씨 업데이트 완료!");
     }
 
+    public Response updateGrapeSeedVerification(Long gpseId, String verification) {
+        MemberEntity writer = userSessionHolder.current();
+        checkMemberAuthority(writer);
+
+        GrapeSeed getGrapeSeed = getGrapeSeed(gpseId);
+        getGrapeSeed.verUpdate(verification);
+
+        return Response.of(HttpStatus.OK, "포도씨 검증 업데이트 완료!");
+    }
+
     public Response deleteGrapeSeed(Long gpseId) {
 
         MemberEntity writer = userSessionHolder.current();

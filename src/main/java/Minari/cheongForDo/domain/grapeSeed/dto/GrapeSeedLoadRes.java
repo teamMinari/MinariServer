@@ -14,6 +14,7 @@ public record GrapeSeedLoadRes(
             Integer gpseExp,
             Long gpseQtId,
             String gpseUrl,
+            String gpseVerification,
             List<String> termNmList
 ) {
     public static GrapeSeedLoadRes of(GrapeSeed grapeSeed) {
@@ -30,6 +31,7 @@ public record GrapeSeedLoadRes(
                 grapeSeed.getGpseExp(),
                 grapeSeed.getGpseQtId(),
                 grapeSeed.getGpseUrl(),
+                grapeSeed.getGpseVerification(),
                 termNmList
         );
     }
