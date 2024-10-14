@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -65,4 +67,11 @@ public class MemberController {
         MemberExpResponseDTO response = memberService.checkAttendance(request.getExpToAdd());
         return ResponseEntity.ok(response);
     }
+
+    // 랭킹
+    @GetMapping("/rank")
+    public ResponseEntity<List<MemberResponseDTO>> getMemberRank() {
+        return ResponseEntity.ok(memberService.getRank());
+    }
+
 }

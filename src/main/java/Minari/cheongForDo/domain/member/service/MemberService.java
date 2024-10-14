@@ -23,9 +23,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -134,31 +134,35 @@ public class MemberService {
     // 경험치 지급 로직
     public MemberExpResponseDTO giveExp(long expToAdd) {
         MemberEntity member = userSessionHolder.current();
-        member.increaseExp(expToAdd);  // 경험치 추가 후 두 가지 레벨업 기준 체크
+        member.increaseExp(expToAdd); // 현재 경험치와 총 경험치 증가
         memberRepository.save(member);
-        return MemberExpResponseDTO.of(member);  // 현재 경험치와 레벨 정보 반환
+        return MemberExpResponseDTO.of(member); // 총 경험치 포함
     }
+
 
     // 출석 체크 로직
     public MemberExpResponseDTO checkAttendance(long expToAdd) {
         MemberEntity member = userSessionHolder.current();
-        LocalDate today = LocalDate.now();
-        long daysSkipped = getDaysSkipped(member, today);
-        long totalExpToAdd = expToAdd * (daysSkipped + 1); // 경험치 추가: 건너뛴 날도 포함
-        member.increaseExp(totalExpToAdd, true); // 출석 체크에 따른 경험치 추가
-        member.setLastAttendanceDate(LocalDateTime.now()); // 출석 날짜 업데이트
-        memberRepository.save(member);
+        member.increaseExp(expToAdd); // 지정된 경험치만 추가
+        member.setLastAttendanceDate(LocalDateTime.now()); // 마지막 출석일 업데이트
+        memberRepository.save(member); // 변경된 정보를 저장
 
-        return MemberExpResponseDTO.of(member);
+        return MemberExpResponseDTO.of(member); // 경험치 정보 반환
     }
 
-    // 건너뛴 날 수 계산
-    private long getDaysSkipped(MemberEntity member, LocalDate today) {
-        if (member.getLastAttendanceDate() == null) {
-            return 1;  // 처음 출석할 때는 기본 1일 적용
-        }
-        LocalDate lastCheckDate = member.getLastAttendanceDate().toLocalDate();
-        long daysBetween = ChronoUnit.DAYS.between(lastCheckDate, today);
-        return daysBetween > 1 ? daysBetween - 1 : 0;  // 건너뛴 날만큼 추가
+    // 랭킹(경험치를 기준으로 선정)
+    public List<MemberResponseDTO> getRank() {
+        List<MemberEntity> memberRank = memberRepository.findAll();
+        // 어드민, 검즘자는 제외
+        memberRank = memberRank.stream()
+                .filter(member ->
+                        !member.getAuthority().equals(MemberAccountType.ROLE_ADMIN) &&
+                                !member.getAuthority().equals(MemberAccountType.ROLE_VERIFIER))
+                .collect(Collectors.toList());
+
+        memberRank.sort((m1, m2) -> Long.compare(m2.getTotalExp(), m1.getTotalExp()));
+        return memberRank.stream()
+                .map(MemberResponseDTO::of)
+                .collect(Collectors.toList());
     }
 }
