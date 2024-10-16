@@ -8,6 +8,8 @@ import Minari.cheongForDo.domain.grapes.dto.GrapesCommandReq;
 import Minari.cheongForDo.domain.grapes.dto.GrapesLoadRes;
 import Minari.cheongForDo.domain.grapes.dto.GrapesUpdateReq;
 import Minari.cheongForDo.domain.grapes.entity.Grapes;
+import Minari.cheongForDo.domain.grapes.enums.GrapesAgeGroup;
+import Minari.cheongForDo.domain.grapes.enums.GrapesWork;
 import Minari.cheongForDo.domain.grapes.repository.GrapesRepository;
 import Minari.cheongForDo.domain.learn.entity.Learn;
 import Minari.cheongForDo.domain.learn.repository.LearnRepository;
@@ -52,6 +54,23 @@ public class GrapesService {
 
         return ResponseData.of(HttpStatus.OK, "포도송이 전체 조회 성공!", gpsList.stream().map(GrapesAllLoadRes::of).toList());
     }
+
+    public ResponseData<List<GrapesAllLoadRes>> findByCategoryGrapes(GrapesAgeGroup age, GrapesWork work) {
+        List<Grapes> gpsList;
+
+        if (age == null && work == null) {
+            gpsList = grapesRepository.findAll();
+        } else if (age == null) {
+            gpsList = grapesRepository.findByGpsWork(work);
+        } else if (work == null) {
+            gpsList = grapesRepository.findByGpsAgeGroup(age);
+        } else {
+            gpsList = grapesRepository.findByGpsAgeGroupAndGpsWork(age, work);
+        }
+
+        return ResponseData.of(HttpStatus.OK, "포도송이 카테고리별 조회 성공!", gpsList.stream().map(GrapesAllLoadRes::of).toList());
+    }
+
 
     public ResponseData<GrapesLoadRes> findOneGrapes(Long gpsId) {
 

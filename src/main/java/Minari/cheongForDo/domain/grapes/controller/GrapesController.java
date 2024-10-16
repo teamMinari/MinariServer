@@ -4,6 +4,8 @@ import Minari.cheongForDo.domain.grapes.dto.GrapesAllLoadRes;
 import Minari.cheongForDo.domain.grapes.dto.GrapesCommandReq;
 import Minari.cheongForDo.domain.grapes.dto.GrapesLoadRes;
 import Minari.cheongForDo.domain.grapes.dto.GrapesUpdateReq;
+import Minari.cheongForDo.domain.grapes.enums.GrapesAgeGroup;
+import Minari.cheongForDo.domain.grapes.enums.GrapesWork;
 import Minari.cheongForDo.domain.grapes.service.GrapesService;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
@@ -30,6 +32,12 @@ public class GrapesController {
         return grapesService.findAllGrapes();
     }
 
+    @GetMapping("/category")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "포도송이 카테고리별 조회", description = "만약 없다면 아무 값도 안보내면 됩니다.")
+    public ResponseData<List<GrapesAllLoadRes>> findByCategoryGrapes(GrapesAgeGroup age, GrapesWork work) {
+        return grapesService.findByCategoryGrapes(age, work);
+    }
 
     @GetMapping("{gpsId}")
     @ResponseStatus(HttpStatus.OK)
