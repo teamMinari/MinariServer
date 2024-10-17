@@ -75,6 +75,17 @@ public class TermService {
                 }
         }
 
+        // 키워드가 포함된 모든 용어 조회
+        public ResponseData<List<TermResponseDTO>> getTermsByKeyword(String keyword) {
+                List<Term> termList = termRepository.findByTermNmContaining(keyword);
+
+                return ResponseData.of(HttpStatus.OK, "키워드가 포함된 모든 단어 조회 성공!",
+                        termList.stream().map(
+                        TermResponseDTO::of
+                ).toList());
+        }
+
+
         // 용어 생성
         public Response createTerm(TermRequestDTO requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();
