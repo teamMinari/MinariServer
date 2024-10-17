@@ -40,6 +40,13 @@ public class TermController {
         return termService.getLevelTerms(level);
     }
 
+    @GetMapping("/keyword")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "키워드가 포함된 용어 조회", description = "키워드를 포함한 모든 용어들을 리스트로 보여줍니다.")
+    public ResponseData<List<TermResponseDTO>> getTermsByKeyword(@RequestParam String keyword) {
+        return termService.getTermsByKeyword(keyword);
+    }
+
     // 용어 등록
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
