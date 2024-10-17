@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class TermRequestDTO {
+public class TermCommandReq {
 
     @NotBlank
     private String termNm;

@@ -1,8 +1,8 @@
 package Minari.cheongForDo.domain.term.controller;
 
 import Minari.cheongForDo.domain.term.dto.TermOneLikeLoadRes;
-import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
-import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
+import Minari.cheongForDo.domain.term.dto.TermCommandReq;
+import Minari.cheongForDo.domain.term.dto.TermLoadRes;
 import Minari.cheongForDo.domain.term.model.service.TermService;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
@@ -25,7 +25,7 @@ public class TermController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 전체 조회", description = "아무것도 안 넣으면 20개씩 보여줍니다.")
-    public ResponseData<List<TermResponseDTO>> getTerms(
+    public ResponseData<List<TermLoadRes>> getTerms(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "20") int size
     ) {
@@ -36,14 +36,14 @@ public class TermController {
     @GetMapping("/level/{level}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 난이도 별 조회")
-    public ResponseData<List<TermResponseDTO>> getLevelTerms(@PathVariable Long level) {
+    public ResponseData<List<TermLoadRes>> getLevelTerms(@PathVariable Long level) {
         return termService.getLevelTerms(level);
     }
 
     @GetMapping("/keyword")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "키워드가 포함된 용어 조회", description = "키워드를 포함한 모든 용어들을 리스트로 보여줍니다.")
-    public ResponseData<List<TermResponseDTO>> getTermsByKeyword(@RequestParam String keyword) {
+    public ResponseData<List<TermLoadRes>> getTermsByKeyword(@RequestParam String keyword) {
         return termService.getTermsByKeyword(keyword);
     }
 
@@ -51,7 +51,7 @@ public class TermController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 등록")
-    public Response createTerm(@RequestBody TermRequestDTO requestDTO) {
+    public Response createTerm(@RequestBody TermCommandReq requestDTO) {
         return termService.createTerm(requestDTO);
     }
 
@@ -59,7 +59,7 @@ public class TermController {
     @GetMapping("{termId}")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 일일 조회")
-    public ResponseData<TermResponseDTO> getTerm(@PathVariable Long termId) {
+    public ResponseData<TermLoadRes> getTerm(@PathVariable Long termId) {
         return termService.findOneTerm(termId);
     }
 
@@ -75,7 +75,7 @@ public class TermController {
     @PatchMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "용어 업데이트")
-    public ResponseData<String> updateTerm(@RequestParam Long termId, @RequestBody TermRequestDTO requestDTO) {
+    public ResponseData<String> updateTerm(@RequestParam Long termId, @RequestBody TermCommandReq requestDTO) {
         return termService.update(termId, requestDTO);
     }
 

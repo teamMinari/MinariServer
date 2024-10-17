@@ -5,8 +5,8 @@ import Minari.cheongForDo.domain.like.repository.LikeRepository;
 import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.term.dto.TermOneLikeLoadRes;
-import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
-import Minari.cheongForDo.domain.term.dto.TermResponseDTO;
+import Minari.cheongForDo.domain.term.dto.TermCommandReq;
+import Minari.cheongForDo.domain.term.dto.TermLoadRes;
 import Minari.cheongForDo.domain.term.entity.Term;
 import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import Minari.cheongForDo.domain.term.repository.TermRepository;
@@ -38,25 +38,25 @@ public class TermService {
         private final UserSessionHolder userSessionHolder;
 
         // 용어 전체 조회
-        public ResponseData<List<TermResponseDTO>> getTerms(int page, int size) {
+        public ResponseData<List<TermLoadRes>> getTerms(int page, int size) {
                 Pageable pageable = PageRequest.of(page, size);
 
                 Page<Term> termLists = termRepository.findAll(pageable);
 
                 return ResponseData.of(HttpStatus.OK, "용어 전체 조회 성공!",
                         termLists.stream().map(
-                                TermResponseDTO::of
+                                TermLoadRes::of
                         ).toList());
         }
 
         // 용어 난이도 별 조회
-        public ResponseData<List<TermResponseDTO>> getLevelTerms(Long level) {
+        public ResponseData<List<TermLoadRes>> getLevelTerms(Long level) {
 
                 List<Term> termList = checkQuestionLevel(level);
 
                 return ResponseData.of(HttpStatus.OK, "용어 난이도 별 조회 성공!",
                         termList.stream().map(
-                        TermResponseDTO::of
+                        TermLoadRes::of
                 ).toList());
         }
 
@@ -76,18 +76,18 @@ public class TermService {
         }
 
         // 키워드가 포함된 모든 용어 조회
-        public ResponseData<List<TermResponseDTO>> getTermsByKeyword(String keyword) {
+        public ResponseData<List<TermLoadRes>> getTermsByKeyword(String keyword) {
                 List<Term> termList = termRepository.findByTermNmContaining(keyword);
 
                 return ResponseData.of(HttpStatus.OK, "키워드가 포함된 모든 단어 조회 성공!",
                         termList.stream().map(
-                        TermResponseDTO::of
+                        TermLoadRes::of
                 ).toList());
         }
 
 
         // 용어 생성
-        public Response createTerm(TermRequestDTO requestDTO) {
+        public Response createTerm(TermCommandReq requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 checkMemberAuthority(curMember);
@@ -104,15 +104,15 @@ public class TermService {
         }
 
         // 용어 하나 조회
-        public ResponseData<TermResponseDTO> findOneTerm(Long termId) {
+        public ResponseData<TermLoadRes> findOneTerm(Long termId) {
                 Term getTerm = getTerm(termId);
 
-                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermResponseDTO.of(getTerm));
+                return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermLoadRes.of(getTerm));
 
         }
 
         // 용어 수정
-        public ResponseData<String> update(Long termId, TermRequestDTO requestDTO) {
+        public ResponseData<String> update(Long termId, TermCommandReq requestDTO) {
                 MemberEntity curMember = userSessionHolder.current();
 
                 checkMemberAuthority(curMember);
