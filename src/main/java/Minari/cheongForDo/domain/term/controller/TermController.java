@@ -43,7 +43,7 @@ public class TermController {
     @GetMapping("/keyword")
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "키워드가 포함된 용어 조회", description = "키워드를 포함한 모든 용어들을 리스트로 보여줍니다.")
-    public ResponseData<List<TermLoadRes>> getTermsByKeyword(@RequestParam String keyword) {
+    public ResponseData<List<TermOneLikeLoadRes>> getTermsByKeyword(@RequestParam String keyword) {
         return termService.getTermsByKeyword(keyword);
     }
 
@@ -61,14 +61,6 @@ public class TermController {
     @Operation(summary = "용어 일일 조회")
     public ResponseData<TermLoadRes> getTerm(@PathVariable Long termId) {
         return termService.findOneTerm(termId);
-    }
-
-    // 용어 이름으로 조회
-    @GetMapping("/name/{termNm}")
-    @ResponseStatus(HttpStatus.OK)
-    @Operation(summary = "용어 이름으로 조회", description = "이거 포도씨 안에 들어있는 용어 이름으로 조회하면 됩니다.")
-    public ResponseData<TermOneLikeLoadRes> getTermWithNm(@PathVariable String termNm) {
-        return termService.getTermsWithNm(termNm);
     }
 
     // 용어 수정
