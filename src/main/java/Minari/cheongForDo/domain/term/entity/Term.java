@@ -1,6 +1,6 @@
 package Minari.cheongForDo.domain.term.entity;
 
-import Minari.cheongForDo.domain.term.dto.TermRequestDTO;
+import Minari.cheongForDo.domain.term.dto.TermCommandReq;
 import Minari.cheongForDo.domain.term.model.enums.TermDifficulty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +39,7 @@ public class Term {
     @Enumerated(EnumType.STRING)
     private TermDifficulty termDifficulty;
 
-    public void update(TermRequestDTO termRequestDTO) {
+    public void update(TermCommandReq termRequestDTO) {
         this.termNm = termRequestDTO.getTermNm();
         this.termExplain = termRequestDTO.getTermExplain();
         this.termDifficulty = termRequestDTO.getTermDifficulty();

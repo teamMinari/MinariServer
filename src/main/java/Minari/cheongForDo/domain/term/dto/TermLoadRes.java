@@ -7,13 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Getter
 @Builder
 @AllArgsConstructor
-public class TermResponseDTO {
+public class TermLoadRes {
 
     @NotBlank
     private Long termId;
@@ -27,8 +24,8 @@ public class TermResponseDTO {
     @NotBlank
     private TermDifficulty termDifficulty;
 
-    public static TermResponseDTO of(Term term) {
-        return TermResponseDTO.builder()
+    public static TermLoadRes of(Term term) {
+        return TermLoadRes.builder()
                 .termId(term.getTermId())
                 .termNm(term.getTermNm())
                 .termExplain(term.getTermExplain())
