@@ -17,7 +17,8 @@ public interface TermRepository extends JpaRepository<Term, Long> {
     Page<Term> findAll(Pageable pageable);
     Term findByTermNm(String termNm);
 
-    @Query("SELECT t FROM Term t WHERE t.termNm LIKE %:keyword%")
+    @Query("SELECT t FROM Term t LEFT JOIN FETCH t.likes l WHERE t.termNm LIKE %:keyword%")
     List<Term> findByTermNmContaining(@Param("keyword") String keyword);
+
 
 }

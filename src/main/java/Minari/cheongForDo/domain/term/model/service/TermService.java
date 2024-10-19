@@ -60,31 +60,21 @@ public class TermService {
                 ).toList());
         }
 
-        // 용어 이름으로 조회
-        public ResponseData<TermOneLikeLoadRes> getTermsWithNm(String termNm) {
+        // 키워드가 포함된 모든 용어 조회
+        public ResponseData<List<TermOneLikeLoadRes>> getTermsByKeyword(String keyword) {
                 MemberEntity curMember = userSessionHolder.current();
 
-                Term getTerm = termRepository.findByTermNm(termNm);
-
-                Optional<Like> like = likeRepository.findByMemberAndTerm(curMember, getTerm);
-
-                if (like.isEmpty()) {
-                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLikeLoadRes.of(getTerm, false));
-                } else {
-                        return ResponseData.of(HttpStatus.OK, "용어 조회 성공!", TermOneLikeLoadRes.of(getTerm, true));
-                }
-        }
-
-        // 키워드가 포함된 모든 용어 조회
-        public ResponseData<List<TermLoadRes>> getTermsByKeyword(String keyword) {
                 List<Term> termList = termRepository.findByTermNmContaining(keyword);
 
-                return ResponseData.of(HttpStatus.OK, "키워드가 포함된 모든 단어 조회 성공!",
-                        termList.stream().map(
-                        TermLoadRes::of
-                ).toList());
-        }
+                List<TermOneLikeLoadRes> result = termList.stream()
+                        .map(term -> {
+                                Boolean termLike = likeRepository.findByMemberAndTerm(curMember, term).isPresent();
+                                return TermOneLikeLoadRes.of(term, termLike);
+                        })
+                        .toList();
 
+                return ResponseData.of(HttpStatus.OK, "키워드가 포함된 모든 단어 조회 성공!", result);
+        }
 
         // 용어 생성
         public Response createTerm(TermCommandReq requestDTO) {
