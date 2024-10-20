@@ -44,6 +44,5 @@ public class SpringConfig {
                         .security(List.of(new SecurityRequirement().addList("Authorization"))))
                 .pathsToMatch("/**")
                 .build();
-
     }
 }
