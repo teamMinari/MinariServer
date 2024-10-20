@@ -2,6 +2,7 @@ package Minari.cheongForDo.domain.member.presentation.controller;
 
 import Minari.cheongForDo.domain.member.presentation.dto.*;
 import Minari.cheongForDo.domain.member.service.MemberService;
+import Minari.cheongForDo.domain.oauth.dto.OAuthLoginRequestDTO;
 import Minari.cheongForDo.global.auth.JwtInfo;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
@@ -35,10 +36,22 @@ public class MemberController {
         return memberService.postLogin(dto);
     }
 
+    // Google 로그인 후 가입/로그인 처리
+    @PostMapping("/oauth2/login")
+    public ResponseData<JwtInfo> postOAuth2Login(@RequestBody OAuthLoginRequestDTO dto) {
+        return memberService.postOAuth2Login(dto);
+    }
+
     // 로그아웃
     @GetMapping("/logout")
     public Response logout(HttpServletRequest request, HttpServletResponse response) {
         return memberService.logout(request, response);
+    }
+
+    // 토큰 갱신
+    @PostMapping("/refresh")
+    public ResponseData<JwtInfo> refreshAccessToken(@RequestBody RefreshTokenRequestDTO dto) {
+        return memberService.refreshAccessToken(dto);
     }
 
     // 프로필 확인
@@ -70,8 +83,7 @@ public class MemberController {
 
     // 랭킹
     @GetMapping("/rank")
-    public ResponseEntity<List<MemberResponseDTO>> getMemberRank() {
+    public ResponseEntity<List<RankingResponseDTO>> getMemberRank() {
         return ResponseEntity.ok(memberService.getRank());
     }
-
 }

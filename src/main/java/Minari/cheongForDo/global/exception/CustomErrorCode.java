@@ -26,6 +26,7 @@ public enum CustomErrorCode {
 
     // JWT 관련 오류
     JWT_WAS_EXPIRED(HttpStatus.FORBIDDEN, "J-1", "토큰이 만료되었습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.FORBIDDEN, "J-2", "유효하지 않은 리프레시 토큰입니다."),
 
     // 퀴즈 관련 오류
     QUESTION_NOT_EXIST(HttpStatus.NOT_FOUND, "Q-1", "질문이 존재하지 않습니다."),

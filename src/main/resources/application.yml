@@ -20,6 +20,8 @@ spring:
         options:
           model: gpt-3.5-turbo
           temperature: 0.5
+  profiles:
+    include: oauth
 
 jwt:
   secret: ${JWT_SECRET}
