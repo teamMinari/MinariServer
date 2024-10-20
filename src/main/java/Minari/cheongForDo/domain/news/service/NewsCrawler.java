@@ -22,37 +22,71 @@ import java.util.List;
 public class NewsCrawler {
     private final HttpClient client;
 
-    public List<CrawlingResult> crawl(String url) {
+    public List<CrawlingResult> crawl(String url, String category) {
         try {
             var m = client.send(
                     HttpRequest.newBuilder()
                             .GET()
-                            .uri(URI.create("https://news.naver.com/breakingnews/section/101/259"))
+                            .uri(URI.create(url))
                             .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
                             .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7")
                             .build(),
                     HttpResponse.BodyHandlers.ofString()
             );
-            Elements divItems = Jsoup.parse(m.body())
-                    .body()
-                    .select("li.sa_item._LAZY_LOADING_WRAP");
 
             List<CrawlingResult> res = new ArrayList<>();
-            for (Element div : divItems) {
-                var sel = div.selectFirst("a.sa_text_title");
-                String title = sel != null ? sel.selectFirst("strong.sa_text_strong").text().strip() : null;
-                String postUrl = sel != null ? sel.attr("abs:href") : null;
 
-                sel = div.selectFirst("div.sa_text_press");
-                String company = sel != null ? sel.text().strip() : null;
+            if ("hotnews".equals(category)) {
+                // 핫뉴스일 때의 크롤링 처리
+                Elements hotNewsItems = Jsoup.parse(m.body())
+                        .body()
+                        .select("div.sa_item_flex._LAZY_LOADING_WRAP");
 
-                sel = div.selectFirst("div.sa_thumb img");
-                String thumbnail = sel != null ? sel.attr("data-src") : null;
+                for (Element div : hotNewsItems) {
+                    Element thumbnailElement = div.selectFirst("div.sa_thumb img");
+                    String thumbnail = thumbnailElement != null ? thumbnailElement.attr("data-src") : null;
 
-                sel = div.selectFirst("div.sa_text_datetime is_recent");
-                String uploadTime = sel != null ? sel.text().strip() : null;
+                    Element titleElement = div.selectFirst("a.sa_text_title");
+                    String title = titleElement != null && titleElement.selectFirst("strong.sa_text_strong") != null
+                            ? titleElement.selectFirst("strong.sa_text_strong").text().strip()
+                            : null;
+                    String postUrl = titleElement != null ? titleElement.attr("abs:href") : null;
 
-                res.add(new CrawlingResult(title, postUrl, company, thumbnail, uploadTime));
+                    Element companyElement = div.selectFirst("div.sa_text_press");
+                    String company = companyElement != null ? companyElement.text().strip() : null;
+
+                    String uploadTime = null;
+
+                    res.add(new CrawlingResult(title, postUrl, company, thumbnail, uploadTime));
+                }
+            } else {
+                // 핫뉴스가 아닌 다른 카테고리의 크롤링 처리
+                Elements divItems = Jsoup.parse(m.body())
+                        .body()
+                        .select("li.sa_item._LAZY_LOADING_WRAP");
+
+                for (Element div : divItems) {
+                    var sel = div.selectFirst("a.sa_text_title");
+                    String title = sel != null && sel.selectFirst("strong.sa_text_strong") != null
+                            ? sel.selectFirst("strong.sa_text_strong").text().strip()
+                            : null;
+                    String postUrl = sel != null ? sel.attr("abs:href") : null;
+
+                    sel = div.selectFirst("div.sa_text_press");
+                    String company = sel != null ? sel.text().strip() : null;
+
+                    sel = div.selectFirst("div.sa_thumb img");
+                    String thumbnail = sel != null ? sel.attr("data-src") : null;
+
+                    if (thumbnail == null || thumbnail.isEmpty()) {
+                        continue;
+                    }
+
+                    sel = div.selectFirst("div.sa_text_datetime.is_recent");
+                    String uploadTime = sel != null ? sel.text().strip() : null;
+
+                    res.add(new CrawlingResult(title, postUrl, company, thumbnail, uploadTime));
+                }
             }
             return res;
         } catch (IOException | InterruptedException e) {

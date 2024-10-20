@@ -13,6 +13,7 @@ public class NewsService {
     private final NewsCrawler crawler;
 
     public List<CrawlingResult> crawlWithCategory(String cat) {
-        return crawler.crawl(NewsCategory.of(cat).getUrl());
+        String url = NewsCategory.of(cat).getUrl();
+        return crawler.crawl(url, cat);
     }
 }
