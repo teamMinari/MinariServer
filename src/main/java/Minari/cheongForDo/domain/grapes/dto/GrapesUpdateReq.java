@@ -1,13 +1,13 @@
 package Minari.cheongForDo.domain.grapes.dto;
 
-import Minari.cheongForDo.domain.grapes.enums.GrapesCategory;
-
-import java.util.List;
+import Minari.cheongForDo.domain.grapes.enums.GrapesAgeGroup;
+import Minari.cheongForDo.domain.grapes.enums.GrapesWork;
 
 public record GrapesUpdateReq(
         String gpsName,
         String gpsContent,
         String gpsImg,
-        List<GrapesCategory> gpTpList
+        GrapesAgeGroup gpsAgeGroup,
+        GrapesWork gpsWork
 ) {
 }

@@ -184,6 +184,7 @@ public class MemberService {
         return MemberExpResponseDTO.of(member); // 총 경험치 포함
     }
 
+
     // 출석 체크 로직
     public MemberExpResponseDTO checkAttendance(long expToAdd) {
         MemberEntity member = userSessionHolder.current();

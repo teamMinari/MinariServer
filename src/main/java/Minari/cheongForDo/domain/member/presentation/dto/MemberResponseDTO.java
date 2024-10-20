@@ -14,7 +14,6 @@ public class MemberResponseDTO {
     private Long idx;
     private String id;
     private String email;
-    private String vocaBook;
     private Long point;
     private Long exp;
     private MemberAccountType authority;
@@ -28,7 +27,6 @@ public class MemberResponseDTO {
                 .idx(member.getIdx())
                 .id(member.getId())
                 .email(member.getEmail())
-                .vocaBook(member.getVocaBook())
                 .point(member.getPoint())
                 .exp(member.getExp())
                 .authority(member.getAuthority())

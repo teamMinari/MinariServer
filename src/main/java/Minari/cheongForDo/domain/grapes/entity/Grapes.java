@@ -2,7 +2,8 @@ package Minari.cheongForDo.domain.grapes.entity;
 
 import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grapes.dto.GrapesUpdateReq;
-import Minari.cheongForDo.domain.grapes.enums.GrapesCategory;
+import Minari.cheongForDo.domain.grapes.enums.GrapesAgeGroup;
+import Minari.cheongForDo.domain.grapes.enums.GrapesWork;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -70,9 +71,13 @@ public class Grapes {
     @Column(nullable = false)
     private String gpsImg;
 
-    // 포도송이 카테고리 리스트
-    @Column(nullable = false)
-    private List<GrapesCategory> gpTpList;
+    // 포도송이 연령대
+    @Column
+    private GrapesAgeGroup gpsAgeGroup;
+
+    // 포도송이 관련 직업
+    @Column
+    private GrapesWork gpsWork;
 
     // 포도알 리스트
     @ManyToMany(fetch = FetchType.LAZY)
@@ -84,7 +89,8 @@ public class Grapes {
         this.gpsName = updateReq.gpsName();
         this.gpsContent = updateReq.gpsContent();
         this.gpsImg = updateReq.gpsImg();
-        this.gpTpList = updateReq.gpTpList();
+        this.gpsAgeGroup = updateReq.gpsAgeGroup();
+        this.gpsWork = updateReq.gpsWork();
     }
 
     public void gpsLikeFalse() {

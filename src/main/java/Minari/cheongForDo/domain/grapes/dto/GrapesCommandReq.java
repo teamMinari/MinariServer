@@ -2,7 +2,8 @@ package Minari.cheongForDo.domain.grapes.dto;
 
 import Minari.cheongForDo.domain.grape.entity.Grape;
 import Minari.cheongForDo.domain.grapes.entity.Grapes;
-import Minari.cheongForDo.domain.grapes.enums.GrapesCategory;
+import Minari.cheongForDo.domain.grapes.enums.GrapesAgeGroup;
+import Minari.cheongForDo.domain.grapes.enums.GrapesWork;
 
 import java.util.List;
 
@@ -10,7 +11,8 @@ public record GrapesCommandReq(
         String gpsName,
         String gpsContent,
         String gpsImg,
-        List<GrapesCategory> gpTpList,
+        GrapesAgeGroup gpsAgeGroup,
+        GrapesWork gpsWork,
         List<Long> gpIdList
 ) {
     public Grapes toEntity(List<Grape> grapeList,
@@ -22,13 +24,14 @@ public record GrapesCommandReq(
                 .gpsContent(gpsContent)
                 .gpsTime(gpsTime)
                 .gpCntMax(grapeList.size())
-                .gpCnt(0) // load 처리
-                .gpProgress(0) // load 처리
+                .gpCnt(0)
+                .gpProgress(0)
                 .gpsExp(gpsExp)
                 .gpsTF(false)
                 .gpsLike(false)
                 .gpsImg(gpsImg)
-                .gpTpList(gpTpList)
+                .gpsAgeGroup(gpsAgeGroup)
+                .gpsWork(gpsWork)
                 .gpList(grapeList)
                 .build();
     }

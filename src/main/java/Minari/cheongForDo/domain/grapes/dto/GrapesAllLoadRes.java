@@ -1,9 +1,8 @@
 package Minari.cheongForDo.domain.grapes.dto;
 
 import Minari.cheongForDo.domain.grapes.entity.Grapes;
-import Minari.cheongForDo.domain.grapes.enums.GrapesCategory;
-
-import java.util.List;
+import Minari.cheongForDo.domain.grapes.enums.GrapesAgeGroup;
+import Minari.cheongForDo.domain.grapes.enums.GrapesWork;
 
 public record GrapesAllLoadRes (
         Long gpsId,
@@ -11,7 +10,8 @@ public record GrapesAllLoadRes (
         String gpsContent,
         Integer gpsTime,
         Boolean gpsLike,
-        List<GrapesCategory> gpTpList
+        GrapesAgeGroup gpsAgeGroup,
+        GrapesWork gpsWork
 ) {
     public static GrapesAllLoadRes of(Grapes grapes) {
         return new GrapesAllLoadRes(
@@ -20,7 +20,8 @@ public record GrapesAllLoadRes (
                 grapes.getGpsContent(),
                 grapes.getGpsTime(),
                 grapes.getGpsLike(),
-                grapes.getGpTpList()
+                grapes.getGpsAgeGroup(),
+                grapes.getGpsWork()
                 );
     }
 }

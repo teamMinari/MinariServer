@@ -38,10 +38,6 @@ public class MemberEntity extends BaseTimeEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
-    // 단어장
-    @Column(name = "vocaBook")
-    private String vocaBook;
-
     // 포인트
     @Column(name = "point", nullable = false)
     private Long point = 0L;
@@ -49,6 +45,10 @@ public class MemberEntity extends BaseTimeEntity {
     // 경험치
     @Column(name = "exp", nullable = false)
     private Long exp = 0L;
+
+    // total 경험치
+    @Column(name = "total_exp", nullable = false)
+    private Long totalExp = 0L; // 새로운 필드
 
     // 권한
     @Column(name = "authority", nullable = false)
@@ -81,7 +81,6 @@ public class MemberEntity extends BaseTimeEntity {
             String id,
             String password,
             String email,
-            String vocaBook,
             Long point,
             Long exp,
             MemberAccountType authority,
@@ -94,7 +93,6 @@ public class MemberEntity extends BaseTimeEntity {
         this.id = id;
         this.password = password;
         this.email = email;
-        this.vocaBook = vocaBook;
         this.point = point;
         this.exp = exp;
         this.authority = authority;
@@ -104,56 +102,48 @@ public class MemberEntity extends BaseTimeEntity {
         this.gpsList = gpsList;
     }
 
-    // 경험치 레벨 기준
-    private static final long[] REQUIRED_EXP_PER_LEVEL = {0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500};
-
-    // 보상(칭호) 해금 기준(?)
-    private static final long[] CHECK_LEVEL_EXP = {0, 70, 140, 210, 280, 350, 420, 490, 560, 630};
-
-    public void increaseExp(long expToAdd) {
-        increaseExp(expToAdd, false);
-    }
-
-    public void increaseExp(long expToAdd, boolean isAttendanceCheck) {
-        this.exp += expToAdd; // 경험치가 실제로 추가되는지 확인
-        if (isAttendanceCheck) {
-            checkAttendanceLevelUp();  // 출석 체크 시 레벨업 체크
-        } else {
-            checkLevelUp();  // 일반 경험치 증가 시 레벨업 체크
-        }
-    }
-
-    // 포인트 추가 메서드
+    // 포인트 추가
     public void increasePoint(long pointToAdd) {
         this.point += pointToAdd; // 포인트 추가
     }
 
-    // 유저 레벨 체크 메서드
-    private void checkLevelUp() {
-        while (this.level < REQUIRED_EXP_PER_LEVEL.length - 1 && this.exp >= REQUIRED_EXP_PER_LEVEL[this.level.intValue()]) {
-            this.exp -= REQUIRED_EXP_PER_LEVEL[this.level.intValue()];
-            this.level++;
-        }
+    // 경험치 레벨 기준
+    private static final long[] REQUIRED_EXP_PER_LEVEL = {0, 100, 300, 600, 1000, 1500, 2100, 2800, 3600, 4500, 5500};
+
+    // 칭호 해금 기준
+    private static final long[] CHECK_LEVEL_EXP = {0, 70, 140, 210, 280, 350, 420, 490, 560, 630};
+
+
+    // 경험치 추가 메서드
+    public void increaseExp(long expToAdd) {
+        this.exp += expToAdd; // 경험치 누적 증가
+        this.totalExp += expToAdd; // 총 경험치도 누적 증가
+        checkAllLevelUp();  // 경험치 추가 후 레벨업 및 칭호 해금 체크
     }
 
-    // 보상지급 레벨 체크 메서드
-    private void checkAttendanceLevelUp() {
+    // 레벨 및 칭호 해금 체크 메서드
+    private void checkAllLevelUp() {
+        // 레벨업 체크
+        while (this.level < REQUIRED_EXP_PER_LEVEL.length - 1 && this.exp >= REQUIRED_EXP_PER_LEVEL[this.level.intValue()]) {
+            this.level++;
+        }
+
+        // 칭호 해금 체크
         while (this.checkLevel < CHECK_LEVEL_EXP.length - 1 && this.exp >= CHECK_LEVEL_EXP[this.checkLevel.intValue()]) {
-            this.exp -= CHECK_LEVEL_EXP[this.checkLevel.intValue()];
             this.checkLevel++;
         }
     }
 
-    // 유저의 전체 경험치
+    // totalExp 계산
     public long getTotalExp() {
-        long totalExp = 0;
-        // 이전 레벨까지의 총 경험치 더하기
-        for (int i = 0; i < this.level; i++) {
-            totalExp += REQUIRED_EXP_PER_LEVEL[i];
-        }
-        // 현재 레벨에서 남아 있는 경험치 더하기
-        totalExp += this.exp;
-        return totalExp;
+        return this.exp; // 현재 경험치만 반환
+    }
+
+    // 레벨 반환
+    public long getLevel() {
+        // checkAllLevelUp을 통해 레벨을 업데이트한 후 현재 레벨 반환
+        checkAllLevelUp();
+        return this.level; // 현재 레벨 반환
     }
 
 }
