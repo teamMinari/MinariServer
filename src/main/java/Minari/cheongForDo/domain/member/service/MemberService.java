@@ -5,7 +5,6 @@ import Minari.cheongForDo.domain.member.authority.MemberAccountType;
 import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import Minari.cheongForDo.domain.member.presentation.dto.*;
 import Minari.cheongForDo.domain.member.repository.MemberRepository;
-import Minari.cheongForDo.domain.oauth.dto.OAuthLoginRequestDTO;
 import Minari.cheongForDo.global.auth.JwtInfo;
 import Minari.cheongForDo.global.auth.JwtUtils;
 import Minari.cheongForDo.global.auth.UserSessionHolder;
@@ -91,30 +90,6 @@ public class MemberService {
         );
     }
 
-    // Google 로그인 처리
-    public ResponseData<JwtInfo> postOAuth2Login(OAuthLoginRequestDTO dto) {
-        // Google에서 제공한 이메일로 사용자 확인
-        MemberEntity member = memberRepository.findByEmail(dto.getEmail())
-                .orElseGet(() -> {
-                    // 새로운 사용자 생성
-                    MemberEntity newMember = MemberEntity.builder()
-                            .id(dto.getId()) // 사용자 입력 ID 설정
-                            .email(dto.getEmail())
-                            .point(0L)
-                            .exp(0L)
-                            .authority(MemberAccountType.ROLE_USER)
-                            .title(null)
-                            .level(1L)
-                            .checkLevel(1L)
-                            .build();
-                    return memberRepository.save(newMember);
-                });
-
-        // JWT 토큰 생성
-        JwtInfo jwtInfo = jwtUtils.generateToken(member);
-        return ResponseData.of(HttpStatus.OK, "Google 로그인 성공!", jwtInfo);
-    }
-
     // 로그아웃
     public Response logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -127,20 +102,16 @@ public class MemberService {
         );
     }
 
-
+    // 로그인 유지
     public ResponseData<JwtInfo> refreshAccessToken(RefreshTokenRequestDTO dto) {
         String refreshToken = dto.getRefreshToken();
-
         // 리프레시 토큰이 유효한지 확인
         if (jwtUtils.validateToken(refreshToken)) {
             String userEmail = jwtUtils.getUserEmailFromToken(refreshToken);
-
             MemberEntity member = memberRepository.findByEmail(userEmail)
                     .orElseThrow(() -> new CustomException(CustomErrorCode.MEMBER_NOT_EXIST));
-
             // 새로운 액세스 토큰 생성
             JwtInfo newJwtInfo = jwtUtils.generateToken(member);
-
             return ResponseData.of(HttpStatus.OK, "새로운 액세스 토큰 발급 성공", newJwtInfo);
         } else {
             throw new CustomException(CustomErrorCode.INVALID_REFRESH_TOKEN);

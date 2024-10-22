@@ -1,6 +1,5 @@
 package Minari.cheongForDo.global.config;
 
-import Minari.cheongForDo.domain.oauth.service.CustomOAuth2UserService;
 import Minari.cheongForDo.global.auth.JwtAuthenticationFilter;
 import Minari.cheongForDo.global.auth.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,27 +26,21 @@ public class SecurityConfig {
     private final ObjectMapper OBJECT_MAPPER;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtUtils jwtUtils, CustomOAuth2UserService customOAuth2UserService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtUtils jwtUtils) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors ((cors) -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/member/login", "/member/register", "/news", "/login/oauth2/**", "member/oauth2/login").permitAll()
+                        .requestMatchers("/member/login", "/member/register", "/news").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(customOAuth2UserService)
-                        )
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
         http.addFilterBefore(new JwtAuthenticationFilter(jwtUtils, OBJECT_MAPPER), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 

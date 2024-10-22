@@ -5,8 +5,10 @@ import Minari.cheongForDo.domain.member.entity.MemberEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class MemberResponseDTO {
@@ -33,6 +35,7 @@ public class MemberResponseDTO {
                 .title(member.getTitle())
                 .level(member.getLevel())
                 .checkLevel(member.getCheckLevel())
+                .totalExp(member.getTotalExp())
                 .build();
     }
 }
