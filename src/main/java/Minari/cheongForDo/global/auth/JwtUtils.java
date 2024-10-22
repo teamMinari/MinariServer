@@ -56,11 +56,9 @@ public class JwtUtils {
                     .getBody();
             return claims.getExpiration().before(new Date());
         } catch (ExpiredJwtException e) {
-            // 토큰이 만료된 경우 예외가 발생하므로 true 반환
-            return true;
+            return true; // 토큰이 만료된 경우
         } catch (Exception e) {
-            // 다른 예외의 경우도 만료된 것으로 간주
-            return true;
+            return true; // 다른 예외의 경우도 만료된 것으로 간주
         }
     }
 

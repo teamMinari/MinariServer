@@ -2,7 +2,6 @@ package Minari.cheongForDo.domain.member.presentation.controller;
 
 import Minari.cheongForDo.domain.member.presentation.dto.*;
 import Minari.cheongForDo.domain.member.service.MemberService;
-import Minari.cheongForDo.domain.oauth.dto.OAuthLoginRequestDTO;
 import Minari.cheongForDo.global.auth.JwtInfo;
 import Minari.cheongForDo.global.response.Response;
 import Minari.cheongForDo.global.response.ResponseData;
@@ -34,12 +33,6 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseData<JwtInfo> postLogin(@Valid @RequestBody MemberLoginDTO dto) {
         return memberService.postLogin(dto);
-    }
-
-    // Google 로그인 후 가입/로그인 처리
-    @PostMapping("/oauth2/login")
-    public ResponseData<JwtInfo> postOAuth2Login(@RequestBody OAuthLoginRequestDTO dto) {
-        return memberService.postOAuth2Login(dto);
     }
 
     // 로그아웃
@@ -85,5 +78,11 @@ public class MemberController {
     @GetMapping("/rank")
     public ResponseEntity<List<RankingResponseDTO>> getMemberRank() {
         return ResponseEntity.ok(memberService.getRank());
+    }
+
+    // cheongfordo.kr/로 접속했을 경우 그냥 아무거나 뜨도록
+    @GetMapping("/")
+    public ResponseEntity<String> home() {
+        return ResponseEntity.ok("청소년을 위한 포켓 경제 서비스 청포도입니다.");
     }
 }
